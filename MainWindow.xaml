@@ -54,13 +54,18 @@
             <Setter Property="CanUserResizeColumns" Value="True"/>
             <Setter Property="CanUserReorderColumns" Value="False"/>
             <Setter Property="FrozenColumnCount" Value="0"/>
+            <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+            <Setter Property="FontSize" Value="12"/>
         </Style>
 
-        <!-- DataGridTextColumn样式 - 文本竖直居中 -->
+        <!-- DataGridTextColumn样式 - 文本竖直居中，水平左对齐 -->
         <Style x:Key="CenteredTextBlockStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="5,0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="8,0"/>
+            <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
         </Style>
     </Window.Resources>
 
