@@ -105,6 +105,17 @@
 
                     <!-- 任务管理Tab -->
                     <lay:LayTabControl x:Name="TaskManagementTabControl">
+                        <lay:LayTabControl.Resources>
+                            <Style TargetType="lay:LayTabItem">
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <ContentPresenter Content="{Binding}" />
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </lay:LayTabControl.Resources>
                         <lay:LayTabItem Header="任务列表">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -123,7 +134,11 @@
                                 <DataGrid x:Name="TasksDataGrid" Grid.Row="1" 
                                           Style="{StaticResource ModernDataGridStyle}"
                                           SelectionChanged="TasksDataGrid_SelectionChanged"
-                                          Sorting="TasksDataGrid_Sorting">
+                                          Sorting="TasksDataGrid_Sorting"
+                                          FontFamily="Segoe UI"
+                                          FontSize="12"
+                                          TextOptions.TextFormattingMode="Display"
+                                          TextOptions.TextRenderingMode="ClearType">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" SortMemberPath="TaskName" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                         <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="80" IsReadOnly="True" SortMemberPath="TaskStatus" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
@@ -148,7 +163,11 @@
 
                                 <!-- 已完成任务列表 -->
                                 <DataGrid x:Name="CompletedTasksDataGrid" Grid.Row="1" 
-                                          Style="{StaticResource ModernDataGridStyle}">
+                                          Style="{StaticResource ModernDataGridStyle}"
+                                          FontFamily="Segoe UI"
+                                          FontSize="12"
+                                          TextOptions.TextFormattingMode="Display"
+                                          TextOptions.TextRenderingMode="ClearType">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                         <DataGridTextColumn Header="完成时间" Binding="{Binding CompletedAtDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
@@ -259,7 +278,11 @@
                                       HorizontalScrollBarVisibility="Auto" MaxHeight="300">
                             <DataGrid x:Name="TimeRecordsDataGrid" 
                                       Style="{StaticResource ModernDataGridStyle}"
-                                      SelectionChanged="TimeRecordsDataGrid_SelectionChanged">
+                                      SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
+                                      FontFamily="Segoe UI"
+                                      FontSize="12"
+                                      TextOptions.TextFormattingMode="Display"
+                                      TextOptions.TextRenderingMode="ClearType">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                     <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
@@ -348,7 +371,11 @@
                                     <TextBlock Text="任务耗时统计" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
 
                                     <DataGrid x:Name="TaskStatisticsDataGrid" Grid.Row="1" 
-                                              Style="{StaticResource ModernDataGridStyle}">
+                                              Style="{StaticResource ModernDataGridStyle}"
+                                              FontFamily="Segoe UI"
+                                              FontSize="12"
+                                              TextOptions.TextFormattingMode="Display"
+                                              TextOptions.TextRenderingMode="ClearType">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                             <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>

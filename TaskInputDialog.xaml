@@ -7,24 +7,24 @@
         ResizeMode="NoResize"
         Background="#f5f5f5">
     
-    <lay:LayCard Margin="20" Padding="20" CornerRadius="8" Background="White">
-        <Grid>
+    <lay:LayCard Margin="5" Padding="5" CornerRadius="4" Background="White">
+        <Grid Width="380" Height="151">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="任务名称:" FontSize="14" FontWeight="Bold" Grid.Row="0" Margin="0,0,0,15" Foreground="#2c3e50"/>
+            <TextBlock Text="任务名称:" FontSize="12" Grid.Row="0" Margin="0,0,0,15" Foreground="#2c3e50"/>
             
             <TextBox x:Name="TaskNameTextBox" Grid.Row="1" Height="35" FontSize="14" 
                      Margin="0,0,0,20" KeyDown="TaskNameTextBox_KeyDown" 
                      Padding="10,8" BorderBrush="#bdc3c7" BorderThickness="1"/>
             
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <lay:LayButton x:Name="CancelButton" Content="取消" Width="80" Height="35" 
+                <lay:LayButton x:Name="CancelButton" Content="取消" Width="80" Height="25" 
                         Margin="0,0,10,0" Click="CancelButton_Click" Type="Default"/>
-                <lay:LayButton x:Name="OkButton" Content="确定" Width="80" Height="35" 
+                <lay:LayButton x:Name="OkButton" Content="确定" Width="80" Height="25" 
                         Click="OkButton_Click" IsDefault="True" Type="Primary"/>
             </StackPanel>
         </Grid>
