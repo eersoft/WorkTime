@@ -1,0 +1,8 @@
+<Application x:Class="WorkTimeWPF.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- 全局样式可以在这里定义 -->
+    </Application.Resources>
+</Application>

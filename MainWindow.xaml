@@ -1,0 +1,396 @@
+<Window x:Class="WorkTimeWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        Title="WorkTime - 工作时间记录" Height="829" Width="1390"
+        MinHeight="600" MinWidth="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#f5f5f5">
+
+    <Window.Resources>
+        <!-- 样式定义 -->
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#2c3e50"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#3498db"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="CompleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="#27ae60"/>
+        </Style>
+
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="#e74c3c"/>
+        </Style>
+
+        <Style x:Key="TimerButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 顶部标题栏 -->
+        <Border Grid.Row="0" Background="#2c3e50" Padding="15,10">
+            <Grid>
+                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+
+        <!-- 主要内容区域 -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 左侧任务管理 -->
+            <Border Grid.Column="0" Background="White" CornerRadius="5" Padding="10" Margin="0,0,5,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 任务管理Tab -->
+                    <TabControl x:Name="TaskManagementTabControl">
+                        <TabItem Header="任务列表">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- 任务控制按钮 -->
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                    <Button x:Name="AddTaskButton" Content="添加任务" Style="{StaticResource ButtonStyle}" Click="AddTaskButton_Click"/>
+                                    <Button x:Name="DeleteTaskButton" Content="删除任务" Style="{StaticResource DeleteButtonStyle}" Click="DeleteTaskButton_Click" IsEnabled="False"/>
+                                    <Button x:Name="RefreshButton" Content="刷新" Style="{StaticResource ButtonStyle}" Click="RefreshButton_Click"/>
+                                </StackPanel>
+
+                                <!-- 任务列表 -->
+                                <DataGrid x:Name="TasksDataGrid" Grid.Row="1" 
+                                          AutoGenerateColumns="False" 
+                                          CanUserAddRows="False" 
+                                          CanUserDeleteRows="False"
+                                          SelectionMode="Single"
+                                          SelectionChanged="TasksDataGrid_SelectionChanged"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="Horizontal"
+                                          AlternatingRowBackground="#f8f9fa"
+                                          CanUserSortColumns="True"
+                                          Sorting="TasksDataGrid_Sorting">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" SortMemberPath="TaskName"/>
+                                        <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="80" IsReadOnly="True" SortMemberPath="TaskStatus"/>
+                                        <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAtDisplay}" Width="100" IsReadOnly="True" SortMemberPath="CreatedAt"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                        
+                        <TabItem Header="已完成任务">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- 已完成任务控制 -->
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                    <Button x:Name="RefreshCompletedButton" Content="刷新" Style="{StaticResource ButtonStyle}" Click="RefreshCompletedButton_Click"/>
+                                    <TextBlock Text="已完成任务列表" VerticalAlignment="Center" Margin="20,0,0,0" FontWeight="Bold"/>
+                                </StackPanel>
+
+                                <!-- 已完成任务列表 -->
+                                <DataGrid x:Name="CompletedTasksDataGrid" Grid.Row="1" 
+                                          AutoGenerateColumns="False" 
+                                          CanUserAddRows="False" 
+                                          CanUserDeleteRows="False"
+                                          HeadersVisibility="Column"
+                                          GridLinesVisibility="Horizontal"
+                                          AlternatingRowBackground="#f8f9fa">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="完成时间" Binding="{Binding CompletedAtDisplay}" Width="120" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="100" IsReadOnly="True"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </Border>
+
+            <!-- 右侧主要内容 -->
+            <Grid Grid.Column="1" Margin="5,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- 任务详情区域 -->
+                <Border Grid.Row="0" Background="White" CornerRadius="5" Padding="15" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- 任务信息 -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock x:Name="TaskNameLabel" Text="未选择任务" FontSize="16" FontWeight="Bold" Grid.Column="0"/>
+                            <TextBlock x:Name="TaskStatusLabel" Text="" FontSize="12" Grid.Column="1"/>
+                            <Button x:Name="CompleteTaskButton" Content="任务已完成" Style="{StaticResource CompleteButtonStyle}" 
+                                    Grid.Column="2" Click="CompleteTaskButton_Click" IsEnabled="False" Visibility="Collapsed"
+                                    Margin="10,0,0,0"/>
+                        </Grid>
+
+                        <!-- 计时器控制 -->
+                        <Grid Grid.Row="1" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock x:Name="TimerDisplay" Text="00:00:00" FontSize="24" FontWeight="Bold" 
+                                       Foreground="#2c3e50" Grid.Column="0" VerticalAlignment="Center"/>
+
+                            <Button x:Name="TimerButton" Content="开始计时" Style="{StaticResource TimerButtonStyle}" 
+                                    Grid.Column="2" Click="TimerButton_Click" IsEnabled="False"/>
+                        </Grid>
+
+                        <!-- 备注输入 -->
+                        <Grid Grid.Row="3" Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="备注:" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            <TextBox x:Name="NotesTextBox" Grid.Column="1" Margin="0,0,10,0"/>
+                            <Button x:Name="SaveNotesButton" Content="保存备注" Style="{StaticResource ButtonStyle}" 
+                                    Grid.Column="2" Click="SaveNotesButton_Click" IsEnabled="False"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- 时间记录列表 -->
+                <Border Grid.Row="1" Background="White" CornerRadius="5" Padding="15" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="时间记录" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
+                            <TextBlock x:Name="TotalDurationLabel" Text="任务总耗时: 00:00:00" 
+                                       FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <DataGrid x:Name="TimeRecordsDataGrid" Grid.Row="1" 
+                                  AutoGenerateColumns="False" 
+                                  CanUserAddRows="False" 
+                                  CanUserDeleteRows="False"
+                                  SelectionMode="Single"
+                                  SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  AlternatingRowBackground="#f8f9fa">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="150" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="150" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="100" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="*" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+
+                <!-- 统计区域 -->
+                <Border Grid.Row="2" Background="White" CornerRadius="5" Padding="15">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="统计分析" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="时间段:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <ComboBox x:Name="TimePeriodComboBox" Width="120" SelectedIndex="0" SelectionChanged="TimePeriodComboBox_SelectionChanged">
+                                    <ComboBoxItem Content="今日"/>
+                                    <ComboBoxItem Content="昨日"/>
+                                    <ComboBoxItem Content="本周"/>
+                                    <ComboBoxItem Content="上周"/>
+                                    <ComboBoxItem Content="本月"/>
+                                    <ComboBoxItem Content="上月"/>
+                                    <ComboBoxItem Content="今年"/>
+                                    <ComboBoxItem Content="去年"/>
+                                </ComboBox>
+                                <Button x:Name="RefreshStatisticsButton" Content="刷新统计" Style="{StaticResource ButtonStyle}" 
+                                        Margin="10,0,0,0" Click="RefreshStatisticsButton_Click"/>
+                                <Button x:Name="ExportButton" Content="导出数据" Style="{StaticResource ButtonStyle}" 
+                                        Margin="10,0,0,0" Click="ExportButton_Click"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- 快速统计信息 -->
+                        <Grid Grid.Row="1" Margin="0,10,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="TotalTimeLabel" Text="总工作时间: 00:00:00" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="ActiveTaskLabel" Text="当前活动任务: 无" FontSize="12"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock x:Name="TaskCountLabel" Text="任务数量: 0" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="CompletedTaskCountLabel" Text="已完成: 0" FontSize="12"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- 统计Tab -->
+                        <TabControl Grid.Row="2" x:Name="StatisticsTabControl">
+                            <TabItem Header="文本统计">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="任务耗时统计" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
+
+                                    <DataGrid x:Name="TaskStatisticsDataGrid" Grid.Row="1" 
+                                              AutoGenerateColumns="False" 
+                                              CanUserAddRows="False" 
+                                              CanUserDeleteRows="False"
+                                              HeadersVisibility="Column"
+                                              GridLinesVisibility="Horizontal"
+                                              AlternatingRowBackground="#f8f9fa">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="120" IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="会话次数" Binding="{Binding SessionCount}" Width="100" IsReadOnly="True"/>
+                                            <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="100" IsReadOnly="True"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </TabItem>
+
+                            <TabItem Header="任务对比图">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="任务耗时对比" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
+
+                                    <Border Grid.Row="1" Background="#f8f9fa" CornerRadius="3" Padding="10">
+                                        <lvc:CartesianChart x:Name="TaskComparisonChart" 
+                                                           LegendLocation="Right"
+                                                           Hoverable="True"
+                                                           DataTooltip="{x:Null}">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="任务"/>
+                                            </lvc:CartesianChart.AxisX>
+                                            <lvc:CartesianChart.AxisY>
+                                                <lvc:Axis Title="耗时(小时)"/>
+                                            </lvc:CartesianChart.AxisY>
+                                        </lvc:CartesianChart>
+                                    </Border>
+                                </Grid>
+                            </TabItem>
+
+                            <TabItem Header="总时长统计">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="总时长统计" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
+
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="图表类型:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <ComboBox x:Name="ChartTypeComboBox" Width="120" SelectedIndex="0" SelectionChanged="ChartTypeComboBox_SelectionChanged">
+                                            <ComboBoxItem Content="柱状图"/>
+                                            <ComboBoxItem Content="折线图"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <Border Grid.Row="2" Background="#f8f9fa" CornerRadius="3" Padding="10">
+                                        <lvc:CartesianChart x:Name="TotalDurationChart" 
+                                                           LegendLocation="Right"
+                                                           Hoverable="True"
+                                                           DataTooltip="{x:Null}">
+                                            <lvc:CartesianChart.AxisX>
+                                                <lvc:Axis Title="时间"/>
+                                            </lvc:CartesianChart.AxisX>
+                                            <lvc:CartesianChart.AxisY>
+                                                <lvc:Axis Title="工作时长(小时)"/>
+                                            </lvc:CartesianChart.AxisY>
+                                        </lvc:CartesianChart>
+                                    </Border>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- 底部状态栏 -->
+        <Border Grid.Row="2" Background="#34495e" Padding="10,5">
+            <Grid>
+                <TextBlock x:Name="StatusLabel" Text="就绪" Foreground="White" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
