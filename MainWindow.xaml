@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:lay="clr-namespace:LayUI.Wpf.Controls;assembly=LayUI.Wpf"
         Title="WorkTime - 工作时间记录" Height="829" Width="1390"
         MinHeight="600" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
@@ -47,12 +48,12 @@
         </Grid.RowDefinitions>
 
         <!-- 顶部标题栏 -->
-        <Border Grid.Row="0" Background="#2c3e50" Padding="15,10">
+        <lay:LayTitleBar Grid.Row="0" Background="#2c3e50" CornerRadius="0" Height="50">
             <Grid>
-                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
-                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Margin="15,0,0,0"/>
+                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
             </Grid>
-        </Border>
+        </lay:LayTitleBar>
 
         <!-- 主要内容区域 -->
         <Grid Grid.Row="1" Margin="10">
@@ -67,7 +68,7 @@
                           ResizeBehavior="PreviousAndNext" ShowsPreview="True"/>
 
             <!-- 左侧任务管理 -->
-            <Border Grid.Column="0" Background="White" CornerRadius="5" Padding="10" Margin="0,0,5,0">
+            <lay:LayCard Grid.Column="0" Background="White" CornerRadius="5" Padding="10" Margin="0,0,5,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -84,9 +85,9 @@
 
                                 <!-- 任务控制按钮 -->
                                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Button x:Name="AddTaskButton" Content="添加任务" Style="{StaticResource ButtonStyle}" Click="AddTaskButton_Click"/>
-                                    <Button x:Name="DeleteTaskButton" Content="删除任务" Style="{StaticResource DeleteButtonStyle}" Click="DeleteTaskButton_Click" IsEnabled="False"/>
-                                    <Button x:Name="RefreshButton" Content="刷新" Style="{StaticResource ButtonStyle}" Click="RefreshButton_Click"/>
+                                    <lay:LayButton x:Name="AddTaskButton" Content="添加任务" Type="Primary" Click="AddTaskButton_Click"/>
+                                    <lay:LayButton x:Name="DeleteTaskButton" Content="删除任务" Type="Danger" Click="DeleteTaskButton_Click" IsEnabled="False"/>
+                                    <lay:LayButton x:Name="RefreshButton" Content="刷新" Type="Default" Click="RefreshButton_Click"/>
                                 </StackPanel>
 
                                 <!-- 任务列表 -->
@@ -141,7 +142,7 @@
                         </TabItem>
                     </TabControl>
                 </Grid>
-            </Border>
+            </lay:LayCard>
 
             <!-- 右侧主要内容 -->
             <Grid Grid.Column="2" Margin="5,0,0,0">
