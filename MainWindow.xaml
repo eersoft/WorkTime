@@ -57,9 +57,14 @@
         <!-- 主要内容区域 -->
         <Grid Grid.Row="1" Margin="10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300" MinWidth="200"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MinWidth="400"/>
             </Grid.ColumnDefinitions>
+
+            <!-- 分割器 -->
+            <GridSplitter Grid.Column="1" Width="5" Background="#bdc3c7" HorizontalAlignment="Center" VerticalAlignment="Stretch" 
+                          ResizeBehavior="PreviousAndNext" ShowsPreview="True"/>
 
             <!-- 左侧任务管理 -->
             <Border Grid.Column="0" Background="White" CornerRadius="5" Padding="10" Margin="0,0,5,0">
@@ -139,7 +144,7 @@
             </Border>
 
             <!-- 右侧主要内容 -->
-            <Grid Grid.Column="1" Margin="5,0,0,0">
+            <Grid Grid.Column="2" Margin="5,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -165,9 +170,6 @@
 
                             <TextBlock x:Name="TaskNameLabel" Text="未选择任务" FontSize="16" FontWeight="Bold" Grid.Column="0"/>
                             <TextBlock x:Name="TaskStatusLabel" Text="" FontSize="12" Grid.Column="1"/>
-                            <Button x:Name="CompleteTaskButton" Content="任务已完成" Style="{StaticResource CompleteButtonStyle}" 
-                                    Grid.Column="2" Click="CompleteTaskButton_Click" IsEnabled="False" Visibility="Collapsed"
-                                    Margin="10,0,0,0"/>
                         </Grid>
 
                         <!-- 计时器控制 -->
@@ -176,13 +178,17 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <TextBlock x:Name="TimerDisplay" Text="00:00:00" FontSize="24" FontWeight="Bold" 
                                        Foreground="#2c3e50" Grid.Column="0" VerticalAlignment="Center"/>
 
                             <Button x:Name="TimerButton" Content="开始计时" Style="{StaticResource TimerButtonStyle}" 
-                                    Grid.Column="2" Click="TimerButton_Click" IsEnabled="False"/>
+                                    Grid.Column="2" Click="TimerButton_Click" IsEnabled="False" Margin="0,0,10,0"/>
+
+                            <Button x:Name="CompleteTaskButton" Content="任务已完成" Style="{StaticResource CompleteButtonStyle}" 
+                                    Grid.Column="3" Click="CompleteTaskButton_Click" IsEnabled="False" Visibility="Collapsed"/>
                         </Grid>
 
                         <!-- 备注输入 -->
@@ -206,6 +212,7 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -216,26 +223,39 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="时间记录" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
+                            <Button x:Name="ToggleTimeRecordsButton" Content="折叠" Style="{StaticResource ButtonStyle}" 
+                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click" FontSize="12" Padding="8,4"/>
+                        </Grid>
+
+                        <Grid Grid.Row="1" x:Name="TimeRecordsHeaderGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
                             <TextBlock x:Name="TotalDurationLabel" Text="任务总耗时: 00:00:00" 
                                        FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"/>
                         </Grid>
 
-                        <DataGrid x:Name="TimeRecordsDataGrid" Grid.Row="1" 
-                                  AutoGenerateColumns="False" 
-                                  CanUserAddRows="False" 
-                                  CanUserDeleteRows="False"
-                                  SelectionMode="Single"
-                                  SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
-                                  HeadersVisibility="Column"
-                                  GridLinesVisibility="Horizontal"
-                                  AlternatingRowBackground="#f8f9fa">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="150" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="150" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="100" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="*" IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="2" x:Name="TimeRecordsScrollViewer" VerticalScrollBarVisibility="Auto" 
+                                      HorizontalScrollBarVisibility="Auto" MaxHeight="300">
+                            <DataGrid x:Name="TimeRecordsDataGrid" 
+                                      AutoGenerateColumns="False" 
+                                      CanUserAddRows="False" 
+                                      CanUserDeleteRows="False"
+                                      SelectionMode="Single"
+                                      SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
+                                      HeadersVisibility="Column"
+                                      GridLinesVisibility="Horizontal"
+                                      AlternatingRowBackground="#f8f9fa">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="150" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="150" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="100" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="*" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
 
@@ -244,6 +264,7 @@
                 <Border Grid.Row="2" Background="White" CornerRadius="5" Padding="15">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -256,6 +277,15 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="统计分析" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
+                            <Button x:Name="ToggleStatisticsButton" Content="折叠" Style="{StaticResource ButtonStyle}" 
+                                    Grid.Column="1" Click="ToggleStatisticsButton_Click" FontSize="12" Padding="8,4"/>
+                        </Grid>
+
+                        <Grid Grid.Row="1" x:Name="StatisticsControlsGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                 <TextBlock Text="时间段:" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -277,7 +307,7 @@
                         </Grid>
 
                         <!-- 快速统计信息 -->
-                        <Grid Grid.Row="1" Margin="0,10,0,10">
+                        <Grid Grid.Row="2" x:Name="QuickStatsGrid" Margin="0,10,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
@@ -295,7 +325,7 @@
                         </Grid>
 
                         <!-- 统计Tab -->
-                        <TabControl Grid.Row="2" x:Name="StatisticsTabControl">
+                        <TabControl Grid.Row="3" x:Name="StatisticsTabControl">
                             <TabItem Header="文本统计">
                                 <Grid>
                                     <Grid.RowDefinitions>

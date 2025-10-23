@@ -1012,6 +1012,40 @@ namespace WorkTimeWPF
             }
         }
 
+        private void ToggleTimeRecordsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (TimeRecordsScrollViewer.Visibility == Visibility.Visible)
+            {
+                TimeRecordsScrollViewer.Visibility = Visibility.Collapsed;
+                TimeRecordsHeaderGrid.Visibility = Visibility.Collapsed;
+                ToggleTimeRecordsButton.Content = "展开";
+            }
+            else
+            {
+                TimeRecordsScrollViewer.Visibility = Visibility.Visible;
+                TimeRecordsHeaderGrid.Visibility = Visibility.Visible;
+                ToggleTimeRecordsButton.Content = "折叠";
+            }
+        }
+
+        private void ToggleStatisticsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (StatisticsTabControl.Visibility == Visibility.Visible)
+            {
+                StatisticsTabControl.Visibility = Visibility.Collapsed;
+                QuickStatsGrid.Visibility = Visibility.Collapsed;
+                StatisticsControlsGrid.Visibility = Visibility.Collapsed;
+                ToggleStatisticsButton.Content = "展开";
+            }
+            else
+            {
+                StatisticsTabControl.Visibility = Visibility.Visible;
+                QuickStatsGrid.Visibility = Visibility.Visible;
+                StatisticsControlsGrid.Visibility = Visibility.Visible;
+                ToggleStatisticsButton.Content = "折叠";
+            }
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             // 检查是否有正在进行的计时器
