@@ -57,16 +57,10 @@
         </Style>
 
         <!-- DataGridTextColumn样式 - 文本竖直居中 -->
-        <Style x:Key="CenteredDataGridTextColumn" TargetType="DataGridTextColumn">
-            <Setter Property="ElementStyle">
-                <Setter.Value>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="Margin" Value="5,0"/>
-                    </Style>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="CenteredTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0"/>
         </Style>
     </Window.Resources>
 
@@ -78,12 +72,12 @@
         </Grid.RowDefinitions>
 
         <!-- 顶部标题栏 -->
-        <lay:LayTitleBar Grid.Row="0" Background="#2c3e50" CornerRadius="0" Height="50">
+        <Border Grid.Row="0" Background="#2c3e50" Padding="15,10">
             <Grid>
-                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Margin="15,0,0,0"/>
-                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,15,0"/>
+                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             </Grid>
-        </lay:LayTitleBar>
+        </Border>
 
         <!-- 主要内容区域 -->
         <Grid Grid.Row="1" Margin="10">
@@ -126,9 +120,9 @@
                                           SelectionChanged="TasksDataGrid_SelectionChanged"
                                           Sorting="TasksDataGrid_Sorting">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" SortMemberPath="TaskName" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                        <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="80" IsReadOnly="True" SortMemberPath="TaskStatus" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                        <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAtDisplay}" Width="100" IsReadOnly="True" SortMemberPath="CreatedAt" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
+                                        <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" SortMemberPath="TaskName" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                        <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="80" IsReadOnly="True" SortMemberPath="TaskStatus" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                        <DataGridTextColumn Header="创建时间" Binding="{Binding CreatedAtDisplay}" Width="100" IsReadOnly="True" SortMemberPath="CreatedAt" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </Grid>
@@ -151,9 +145,9 @@
                                 <DataGrid x:Name="CompletedTasksDataGrid" Grid.Row="1" 
                                           Style="{StaticResource ModernDataGridStyle}">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                        <DataGridTextColumn Header="完成时间" Binding="{Binding CompletedAtDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                        <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="100" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
+                                        <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                        <DataGridTextColumn Header="完成时间" Binding="{Binding CompletedAtDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                        <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="100" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </Grid>
@@ -262,10 +256,10 @@
                                       Style="{StaticResource ModernDataGridStyle}"
                                       SelectionChanged="TimeRecordsDataGrid_SelectionChanged">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                    <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                    <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                    <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
+                                    <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                    <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                    <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                    <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
@@ -351,10 +345,10 @@
                                     <DataGrid x:Name="TaskStatisticsDataGrid" Grid.Row="1" 
                                               Style="{StaticResource ModernDataGridStyle}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                            <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                            <DataGridTextColumn Header="会话次数" Binding="{Binding SessionCount}" Width="100" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
-                                            <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="100" IsReadOnly="True" ElementStyle="{StaticResource CenteredDataGridTextColumn}"/>
+                                            <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                            <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                            <DataGridTextColumn Header="会话次数" Binding="{Binding SessionCount}" Width="100" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                            <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="100" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </Grid>
