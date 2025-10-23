@@ -337,8 +337,8 @@
                         </Grid>
 
                         <!-- 统计Tab -->
-                        <TabControl Grid.Row="3" x:Name="StatisticsTabControl">
-                            <TabItem Header="文本统计">
+                        <lay:LayTabControl Grid.Row="3" x:Name="StatisticsTabControl">
+                            <lay:LayTabItem Header="文本统计">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -357,9 +357,9 @@
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </Grid>
-                            </TabItem>
+                            </lay:LayTabItem>
 
-                            <TabItem Header="任务对比图">
+                            <lay:LayTabItem Header="任务对比图">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -382,9 +382,9 @@
                                         </lvc:CartesianChart>
                                     </Border>
                                 </Grid>
-                            </TabItem>
+                            </lay:LayTabItem>
 
-                            <TabItem Header="总时长统计">
+                            <lay:LayTabItem Header="总时长统计">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -416,8 +416,8 @@
                                         </lvc:CartesianChart>
                                     </Border>
                                 </Grid>
-                            </TabItem>
-                        </TabControl>
+                            </lay:LayTabItem>
+                        </lay:LayTabControl>
                     </Grid>
                 </Border>
             </Grid>
