@@ -249,10 +249,10 @@
                                       GridLinesVisibility="Horizontal"
                                       AlternatingRowBackground="#f8f9fa">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="150" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="150" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="100" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="*" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="Auto" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="Auto" IsReadOnly="True"/>
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
