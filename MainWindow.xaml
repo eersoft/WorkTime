@@ -20,23 +20,55 @@
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="#3498db"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#3498db"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#3498db"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
 
         <Style x:Key="CompleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#27ae60"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#27ae60"/>
+            <Setter Property="BorderBrush" Value="#27ae60"/>
         </Style>
 
         <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#e74c3c"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#e74c3c"/>
+            <Setter Property="BorderBrush" Value="#e74c3c"/>
         </Style>
 
         <Style x:Key="TimerButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- LayButton样式 - 无背景色，有边框 -->
+        <Style x:Key="LayButtonStyle" TargetType="lay:LayButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#3498db"/>
+            <Setter Property="Foreground" Value="#3498db"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="LayButtonPrimaryStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
+            <Setter Property="BorderBrush" Value="#3498db"/>
+            <Setter Property="Foreground" Value="#3498db"/>
+        </Style>
+
+        <Style x:Key="LayButtonDangerStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
+            <Setter Property="BorderBrush" Value="#e74c3c"/>
+            <Setter Property="Foreground" Value="#e74c3c"/>
+        </Style>
+
+        <Style x:Key="LayButtonDefaultStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
+            <Setter Property="BorderBrush" Value="#95a5a6"/>
+            <Setter Property="Foreground" Value="#95a5a6"/>
         </Style>
 
         <!-- DataGrid样式 - 文本竖直居中和固定表头 -->
@@ -125,9 +157,9 @@
 
                                 <!-- 任务控制按钮 -->
                                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,10,0,5">
-                                    <lay:LayButton x:Name="AddTaskButton" Content="➕ 添加任务" Type="Primary" Click="AddTaskButton_Click"/>
-                                    <lay:LayButton x:Name="DeleteTaskButton" Content="🗑️ 删除任务" Type="Danger" Click="DeleteTaskButton_Click" IsEnabled="False"/>
-                                    <lay:LayButton x:Name="RefreshButton" Content="🔄" Type="Default" Click="RefreshButton_Click" Width="35" Height="35"/>
+                                    <lay:LayButton x:Name="AddTaskButton" Content="➕ 添加任务" Style="{StaticResource LayButtonPrimaryStyle}" Click="AddTaskButton_Click" Margin="0,0,5,0"/>
+                                    <lay:LayButton x:Name="DeleteTaskButton" Content="🗑️ 删除任务" Style="{StaticResource LayButtonDangerStyle}" Click="DeleteTaskButton_Click" IsEnabled="False" Margin="5,0,5,0"/>
+                                    <lay:LayButton x:Name="RefreshButton" Content="🔄" Style="{StaticResource LayButtonDefaultStyle}" Click="RefreshButton_Click" Width="35" Height="35" Margin="5,0,0,0"/>
                                 </StackPanel>
 
                                 <!-- 任务列表 -->
