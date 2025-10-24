@@ -1021,13 +1021,13 @@ namespace WorkTimeWPF
             {
                 TimeRecordsScrollViewer.Visibility = Visibility.Collapsed;
                 TimeRecordsHeaderGrid.Visibility = Visibility.Collapsed;
-                ToggleTimeRecordsButton.Content = "展开";
+                ToggleTimeRecordsButton.Content = "▶";
             }
             else
             {
                 TimeRecordsScrollViewer.Visibility = Visibility.Visible;
                 TimeRecordsHeaderGrid.Visibility = Visibility.Visible;
-                ToggleTimeRecordsButton.Content = "折叠";
+                ToggleTimeRecordsButton.Content = "▼";
             }
         }
 
@@ -1038,14 +1038,14 @@ namespace WorkTimeWPF
                 StatisticsTabControl.Visibility = Visibility.Collapsed;
                 QuickStatsGrid.Visibility = Visibility.Collapsed;
                 StatisticsControlsGrid.Visibility = Visibility.Collapsed;
-                ToggleStatisticsButton.Content = "展开";
+                ToggleStatisticsButton.Content = "▶";
             }
             else
             {
                 StatisticsTabControl.Visibility = Visibility.Visible;
                 QuickStatsGrid.Visibility = Visibility.Visible;
                 StatisticsControlsGrid.Visibility = Visibility.Visible;
-                ToggleStatisticsButton.Content = "折叠";
+                ToggleStatisticsButton.Content = "▼";
             }
         }
 

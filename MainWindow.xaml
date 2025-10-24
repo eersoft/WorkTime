@@ -124,10 +124,10 @@
                                 </Grid.RowDefinitions>
 
                                 <!-- 任务控制按钮 -->
-                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                    <lay:LayButton x:Name="AddTaskButton" Content="添加任务" Type="Primary" Click="AddTaskButton_Click"/>
-                                    <lay:LayButton x:Name="DeleteTaskButton" Content="删除任务" Type="Danger" Click="DeleteTaskButton_Click" IsEnabled="False"/>
-                                    <lay:LayButton x:Name="RefreshButton" Content="刷新" Type="Default" Click="RefreshButton_Click"/>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,10,0,5">
+                                    <lay:LayButton x:Name="AddTaskButton" Content="➕ 添加任务" Type="Primary" Click="AddTaskButton_Click"/>
+                                    <lay:LayButton x:Name="DeleteTaskButton" Content="🗑️ 删除任务" Type="Danger" Click="DeleteTaskButton_Click" IsEnabled="False"/>
+                                    <lay:LayButton x:Name="RefreshButton" Content="🔄" Type="Default" Click="RefreshButton_Click" Width="35" Height="35"/>
                                 </StackPanel>
 
                                 <!-- 任务列表 -->
@@ -159,7 +159,7 @@
 
                                 <!-- 已完成任务控制 -->
                                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                    <Button x:Name="RefreshCompletedButton" Content="刷新" Style="{StaticResource ButtonStyle}" Click="RefreshCompletedButton_Click"/>
+                                    <Button x:Name="RefreshCompletedButton" Content="🔄" Style="{StaticResource ButtonStyle}" Click="RefreshCompletedButton_Click" Width="35" Height="35"/>
                                     <TextBlock Text="已完成任务列表" VerticalAlignment="Center" Margin="20,0,0,0" FontWeight="Bold"/>
                                 </StackPanel>
 
@@ -264,8 +264,8 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="时间记录" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
-                            <Button x:Name="ToggleTimeRecordsButton" Content="折叠" Style="{StaticResource ButtonStyle}" 
-                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click" FontSize="12" Padding="8,4"/>
+                            <Button x:Name="ToggleTimeRecordsButton" Content="▼" Style="{StaticResource ButtonStyle}" 
+                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click" FontSize="12" Padding="8,4" Width="30" Height="25"/>
                         </Grid>
 
                         <Grid Grid.Row="1" x:Name="TimeRecordsHeaderGrid">
@@ -318,8 +318,8 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="统计分析" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
-                            <Button x:Name="ToggleStatisticsButton" Content="折叠" Style="{StaticResource ButtonStyle}" 
-                                    Grid.Column="1" Click="ToggleStatisticsButton_Click" FontSize="12" Padding="8,4"/>
+                            <Button x:Name="ToggleStatisticsButton" Content="▼" Style="{StaticResource ButtonStyle}" 
+                                    Grid.Column="1" Click="ToggleStatisticsButton_Click" FontSize="12" Padding="8,4" Width="30" Height="25"/>
                         </Grid>
 
                         <Grid Grid.Row="1" x:Name="StatisticsControlsGrid">
@@ -340,9 +340,9 @@
                                     <ComboBoxItem Content="今年"/>
                                     <ComboBoxItem Content="去年"/>
                                 </ComboBox>
-                                <Button x:Name="RefreshStatisticsButton" Content="刷新统计" Style="{StaticResource ButtonStyle}" 
-                                        Margin="10,0,0,0" Click="RefreshStatisticsButton_Click"/>
-                                <Button x:Name="ExportButton" Content="导出数据" Style="{StaticResource ButtonStyle}" 
+                                <Button x:Name="RefreshStatisticsButton" Content="🔄" Style="{StaticResource ButtonStyle}" 
+                                        Margin="10,0,0,0" Click="RefreshStatisticsButton_Click" Width="35" Height="35"/>
+                                <Button x:Name="ExportButton" Content="📊 导出数据" Style="{StaticResource ButtonStyle}" 
                                         Margin="10,0,0,0" Click="ExportButton_Click"/>
                             </StackPanel>
                         </Grid>
