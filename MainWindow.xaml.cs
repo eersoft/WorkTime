@@ -377,6 +377,7 @@ namespace WorkTimeWPF
                 // 刷新任务列表
                 LoadTasks();
                 LoadCompletedTasks();
+                LoadTaskStatistics();
                 
                 // 刷新时间记录（如果有选中的任务）
                 if (_selectedTask != null)
