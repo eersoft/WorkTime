@@ -58,9 +58,7 @@ namespace WorkTimeWPF
                 _currentTimeTimer.Start();
 
                 // 加载数据
-                LoadTasks();
-                LoadCompletedTasks();
-                LoadTaskStatistics();
+                RefreshAllData();
                 CheckActiveTimer();
                 UpdateCurrentTime();
             }
@@ -369,6 +367,37 @@ namespace WorkTimeWPF
             }
         }
 
+        /// <summary>
+        /// 刷新所有UI数据和控件
+        /// </summary>
+        private void RefreshAllData()
+        {
+            try
+            {
+                // 刷新任务列表
+                LoadTasks();
+                LoadCompletedTasks();
+                
+                // 刷新时间记录（如果有选中的任务）
+                if (_selectedTask != null)
+                {
+                    LoadTimeRecords(_selectedTask.TaskId);
+                }
+                
+                // 刷新统计信息
+                UpdateTodayTotalTime();
+                UpdateCharts();
+                
+                // 刷新任务状态
+                UpdateActiveTaskStatus();
+            }
+            catch (Exception ex)
+            {
+                // 静默处理刷新错误，避免影响用户体验
+                System.Diagnostics.Debug.WriteLine($"刷新数据时发生错误: {ex.Message}");
+            }
+        }
+
         private (DateTime startDate, DateTime endDate) GetSelectedTimeRange()
         {
             var selectedPeriod = "今日";
@@ -493,12 +522,6 @@ namespace WorkTimeWPF
             UpdateTotalDurationChart();
         }
 
-        private void RefreshStatisticsButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadTaskStatistics();
-            UpdateTodayTotalTime();
-            UpdateCharts();
-        }
 
         private void InitializeCharts()
         {
@@ -731,9 +754,7 @@ namespace WorkTimeWPF
                 try
                 {
                     var taskId = _databaseManager.AddTask(inputDialog.TaskName);
-                    LoadTasks();
-                    LoadCompletedTasks();
-                    LoadTaskStatistics();
+                    RefreshAllData();
                     
                     // 选中新添加的任务
                     var tasks = _databaseManager.GetTasks();
@@ -752,18 +773,6 @@ namespace WorkTimeWPF
             }
         }
 
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadTasks();
-            LoadCompletedTasks();
-            LoadTaskStatistics();
-            CheckActiveTimer();
-        }
-
-        private void RefreshCompletedButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadCompletedTasks();
-        }
 
         private void DeleteTaskButton_Click(object sender, RoutedEventArgs e)
         {
@@ -790,11 +799,7 @@ namespace WorkTimeWPF
                     }
 
                     _databaseManager.DeleteTask(_selectedTask.TaskId);
-                    LoadTasks();
-                    LoadCompletedTasks();
-                    LoadTaskStatistics();
-                    UpdateActiveTaskStatus();
-                    UpdateTodayTotalTime();
+                    RefreshAllData();
                     
                     // 清空任务详情
                     _selectedTask = null;
@@ -882,10 +887,8 @@ namespace WorkTimeWPF
                     StartTimerUpdate();
                 }
 
-                LoadTasks();
-                LoadTimeRecords(_selectedTask.TaskId);
-                UpdateActiveTaskStatus();
-                UpdateTodayTotalTime();
+                // 自动刷新所有数据
+                RefreshAllData();
             }
             catch (Exception ex)
             {
@@ -927,10 +930,7 @@ namespace WorkTimeWPF
                     _databaseManager.UpdateTaskStatus(_selectedTask.TaskId, "completed");
                     
                     // 刷新所有相关数据
-                    LoadTasks();
-                    LoadCompletedTasks();
-                    LoadTaskStatistics();
-                    UpdateCharts();
+                    RefreshAllData();
                     
                     // 更新任务详情显示
                     if (_selectedTask != null)
