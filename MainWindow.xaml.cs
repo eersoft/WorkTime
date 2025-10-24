@@ -98,10 +98,13 @@ namespace WorkTimeWPF
                     return;
                 }
 
-                var tasks = _databaseManager.GetTasks();
+                var allTasks = _databaseManager.GetTasks();
+                // 只显示未完成的任务（状态不是"completed"的任务）
+                var activeTasks = allTasks.Where(t => t.TaskStatus != "completed").ToList();
+                
                 if (TasksDataGrid != null)
                 {
-                    TasksDataGrid.ItemsSource = tasks;
+                    TasksDataGrid.ItemsSource = activeTasks;
 
                     // 添加排序事件处理
                     foreach (var column in TasksDataGrid.Columns)
