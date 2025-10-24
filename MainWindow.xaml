@@ -135,10 +135,12 @@
                                           Style="{StaticResource ModernDataGridStyle}"
                                           SelectionChanged="TasksDataGrid_SelectionChanged"
                                           Sorting="TasksDataGrid_Sorting"
-                                          FontFamily="Segoe UI"
-                                          FontSize="12"
+                                          FontFamily="Microsoft YaHei UI"
+                                          FontSize="13"
                                           TextOptions.TextFormattingMode="Display"
-                                          TextOptions.TextRenderingMode="ClearType">
+                                          TextOptions.TextRenderingMode="ClearType"
+                                          SnapsToDevicePixels="True"
+                                          UseLayoutRounding="True">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" SortMemberPath="TaskName" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                         <DataGridTextColumn Header="状态" Binding="{Binding StatusDisplayName}" Width="80" IsReadOnly="True" SortMemberPath="TaskStatus" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
@@ -164,10 +166,12 @@
                                 <!-- 已完成任务列表 -->
                                 <DataGrid x:Name="CompletedTasksDataGrid" Grid.Row="1" 
                                           Style="{StaticResource ModernDataGridStyle}"
-                                          FontFamily="Segoe UI"
-                                          FontSize="12"
+                                          FontFamily="Microsoft YaHei UI"
+                                          FontSize="13"
                                           TextOptions.TextFormattingMode="Display"
-                                          TextOptions.TextRenderingMode="ClearType">
+                                          TextOptions.TextRenderingMode="ClearType"
+                                          SnapsToDevicePixels="True"
+                                          UseLayoutRounding="True">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                         <DataGridTextColumn Header="完成时间" Binding="{Binding CompletedAtDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
@@ -279,10 +283,12 @@
                             <DataGrid x:Name="TimeRecordsDataGrid" 
                                       Style="{StaticResource ModernDataGridStyle}"
                                       SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
-                                      FontFamily="Segoe UI"
-                                      FontSize="12"
+                                      FontFamily="Microsoft YaHei UI"
+                                      FontSize="13"
                                       TextOptions.TextFormattingMode="Display"
-                                      TextOptions.TextRenderingMode="ClearType">
+                                      TextOptions.TextRenderingMode="ClearType"
+                                      SnapsToDevicePixels="True"
+                                      UseLayoutRounding="True">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                     <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
@@ -372,10 +378,12 @@
 
                                     <DataGrid x:Name="TaskStatisticsDataGrid" Grid.Row="1" 
                                               Style="{StaticResource ModernDataGridStyle}"
-                                              FontFamily="Segoe UI"
-                                              FontSize="12"
+                                              FontFamily="Microsoft YaHei UI"
+                                              FontSize="13"
                                               TextOptions.TextFormattingMode="Display"
-                                              TextOptions.TextRenderingMode="ClearType">
+                                              TextOptions.TextRenderingMode="ClearType"
+                                              SnapsToDevicePixels="True"
+                                              UseLayoutRounding="True">
                                         <DataGrid.Columns>
                                             <DataGridTextColumn Header="任务名称" Binding="{Binding TaskName}" Width="*" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
                                             <DataGridTextColumn Header="总耗时" Binding="{Binding TotalDurationDisplay}" Width="120" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
