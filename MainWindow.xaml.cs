@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using WorkTimeWPF.Models;
@@ -425,10 +426,14 @@ namespace WorkTimeWPF
                     var yesterday = now.Date.AddDays(-1);
                     return (yesterday, yesterday.AddDays(1).AddSeconds(-1));
                 case "本周":
-                    var monday = now.Date.AddDays(-(int)now.DayOfWeek + (int)DayOfWeek.Monday);
+                    // 计算本周一的日期
+                    var daysFromMonday = ((int)now.DayOfWeek + 6) % 7; // 星期日=0, 星期一=0, 星期二=1, ..., 星期六=6
+                    var monday = now.Date.AddDays(-daysFromMonday);
                     return (monday, now.Date.AddDays(1).AddSeconds(-1));
                 case "上周":
-                    var lastMonday = now.Date.AddDays(-(int)now.DayOfWeek + (int)DayOfWeek.Monday - 7);
+                    // 计算上周一的日期
+                    var daysFromLastMonday = ((int)now.DayOfWeek + 6) % 7 + 7; // 加上7天得到上周一
+                    var lastMonday = now.Date.AddDays(-daysFromLastMonday);
                     var lastSunday = lastMonday.AddDays(6);
                     return (lastMonday, lastSunday.AddDays(1).AddSeconds(-1));
                 case "本月":
@@ -1046,14 +1051,12 @@ namespace WorkTimeWPF
             if (StatisticsTabControl.Visibility == Visibility.Visible)
             {
                 StatisticsTabControl.Visibility = Visibility.Collapsed;
-                QuickStatsGrid.Visibility = Visibility.Collapsed;
                 StatisticsControlsGrid.Visibility = Visibility.Collapsed;
                 ToggleStatisticsButton.Content = "▶";
             }
             else
             {
                 StatisticsTabControl.Visibility = Visibility.Visible;
-                QuickStatsGrid.Visibility = Visibility.Visible;
                 StatisticsControlsGrid.Visibility = Visibility.Visible;
                 ToggleStatisticsButton.Content = "▼";
             }
@@ -1127,7 +1130,7 @@ namespace WorkTimeWPF
                     HeaderBackground = "#2c3e50",
                     CardBackground = "White",
                     StatusBarBackground = "#34495e",
-                    PrimaryColor = "#007bff",
+                    PrimaryColor = "#2c3e50",
                     SuccessColor = "#28a745",
                     DangerColor = "#dc3545",
                     TextColor = "#2c3e50",
@@ -1174,6 +1177,7 @@ namespace WorkTimeWPF
             if (themes.TryGetValue(themeName, out var colors))
             {
                 ApplyColorsToUI(colors);
+                UpdateButtonColors(colors);
             }
         }
 
@@ -1200,12 +1204,6 @@ namespace WorkTimeWPF
             UpdateButtonColors(colors);
         }
 
-        private void UpdateButtonColors(ThemeColors colors)
-        {
-            // 这里可以通过动态更新样式来改变按钮颜色
-            // 由于WPF的限制，我们需要重新定义样式或使用其他方法
-            // 暂时先记录颜色，实际应用中可能需要更复杂的实现
-        }
 
         private void UpdateThemeButtonStates()
         {
@@ -1230,6 +1228,97 @@ namespace WorkTimeWPF
                 case "Purple":
                     PurpleThemeButton.Tag = "Selected";
                     break;
+            }
+        }
+
+        private void UpdateButtonColors(ThemeColors colors)
+        {
+            try
+            {
+                var brushConverter = new BrushConverter();
+                
+                // 更新计时器按钮颜色
+                if (TimerButton != null)
+                {
+                    TimerButton.Background = (Brush)brushConverter.ConvertFromString(colors.PrimaryColor);
+                    
+                    // 创建悬停和按下状态的深色版本
+                    var hoverColor = DarkenColor(colors.PrimaryColor, 0.2);
+                    var pressedColor = DarkenColor(colors.PrimaryColor, 0.3);
+                    
+                    // 设置触发器样式
+                    var style = new Style(typeof(Button), TimerButton.Style);
+                    style.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(colors.PrimaryColor)));
+                    
+                    var hoverTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
+                    hoverTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(hoverColor)));
+                    style.Triggers.Add(hoverTrigger);
+                    
+                    var pressedTrigger = new Trigger { Property = Button.IsPressedProperty, Value = true };
+                    pressedTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(pressedColor)));
+                    style.Triggers.Add(pressedTrigger);
+                    
+                    TimerButton.Style = style;
+                }
+                
+                // 更新添加任务按钮颜色
+                if (AddTaskButton != null)
+                {
+                    AddTaskButton.Background = (Brush)brushConverter.ConvertFromString(colors.PrimaryColor);
+                    
+                    // 创建悬停和按下状态的深色版本
+                    var hoverColor = DarkenColor(colors.PrimaryColor, 0.2);
+                    var pressedColor = DarkenColor(colors.PrimaryColor, 0.3);
+                    
+                    // 设置触发器样式
+                    var style = new Style(typeof(LayUI.Wpf.Controls.LayButton), AddTaskButton.Style);
+                    style.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(colors.PrimaryColor)));
+                    
+                    var hoverTrigger = new Trigger { Property = LayUI.Wpf.Controls.LayButton.IsMouseOverProperty, Value = true };
+                    hoverTrigger.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(hoverColor)));
+                    style.Triggers.Add(hoverTrigger);
+                    
+                    var pressedTrigger = new Trigger { Property = LayUI.Wpf.Controls.LayButton.IsPressedProperty, Value = true };
+                    pressedTrigger.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(pressedColor)));
+                    style.Triggers.Add(pressedTrigger);
+                    
+                    AddTaskButton.Style = style;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"更新按钮颜色时发生错误: {ex.Message}");
+            }
+        }
+
+        private string DarkenColor(string hexColor, double factor)
+        {
+            try
+            {
+                // 移除#号
+                hexColor = hexColor.TrimStart('#');
+                
+                // 解析RGB值
+                int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+                int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+                int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+                
+                // 计算深色版本
+                r = (int)(r * (1 - factor));
+                g = (int)(g * (1 - factor));
+                b = (int)(b * (1 - factor));
+                
+                // 确保值在0-255范围内
+                r = Math.Max(0, Math.Min(255, r));
+                g = Math.Max(0, Math.Min(255, g));
+                b = Math.Max(0, Math.Min(255, b));
+                
+                // 转换回十六进制
+                return $"#{r:X2}{g:X2}{b:X2}";
+            }
+            catch
+            {
+                return hexColor; // 如果转换失败，返回原颜色
             }
         }
 

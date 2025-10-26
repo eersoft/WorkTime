@@ -105,19 +105,10 @@
         </Style>
 
         <Style x:Key="TimerButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#007bff"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Padding" Value="16,10"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#0056b3"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#004085"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <!-- LayButton样式 - 简约轻量设计 -->
@@ -159,16 +150,7 @@
         </Style>
 
         <Style x:Key="LayButtonPrimaryStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="Background" Value="#007bff"/>
             <Setter Property="Foreground" Value="White"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#0056b3"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#004085"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <Style x:Key="LayButtonDangerStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
@@ -572,7 +554,6 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -587,13 +568,33 @@
                                     Grid.Column="1" Click="ToggleStatisticsButton_Click"/>
                         </Grid>
 
-                        <Grid Grid.Row="1" x:Name="StatisticsControlsGrid">
+                        <!-- 统计信息和控件合并到同一行 -->
+                        <Grid Grid.Row="1" x:Name="StatisticsControlsGrid" Margin="0,10,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <!-- 左侧：快速统计信息 -->
+                            <Grid Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock x:Name="TotalTimeLabel" Text="总工作时间: 00:00:00" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <TextBlock x:Name="ActiveTaskLabel" Text="当前活动任务: 无" FontSize="12"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock x:Name="TaskCountLabel" Text="任务数量: 0" FontWeight="Bold" Margin="0,0,0,5"/>
+                                    <TextBlock x:Name="CompletedTaskCountLabel" Text="已完成: 0" FontSize="12"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- 右侧：时间段选择和导出按钮 -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="时间段:" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                 <ComboBox x:Name="TimePeriodComboBox" Width="120" SelectedIndex="0" SelectionChanged="TimePeriodComboBox_SelectionChanged">
                                     <ComboBoxItem Content="今日"/>
@@ -610,26 +611,8 @@
                             </StackPanel>
                         </Grid>
 
-                        <!-- 快速统计信息 -->
-                        <Grid Grid.Row="2" x:Name="QuickStatsGrid" Margin="0,10,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Grid.Column="0">
-                                <TextBlock x:Name="TotalTimeLabel" Text="总工作时间: 00:00:00" FontWeight="Bold" Margin="0,0,0,5"/>
-                                <TextBlock x:Name="ActiveTaskLabel" Text="当前活动任务: 无" FontSize="12"/>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="1">
-                                <TextBlock x:Name="TaskCountLabel" Text="任务数量: 0" FontWeight="Bold" Margin="0,0,0,5"/>
-                                <TextBlock x:Name="CompletedTaskCountLabel" Text="已完成: 0" FontSize="12"/>
-                            </StackPanel>
-                        </Grid>
-
                         <!-- 统计Tab -->
-                        <lay:LayTabControl Grid.Row="3" x:Name="StatisticsTabControl">
+                        <lay:LayTabControl Grid.Row="2" x:Name="StatisticsTabControl">
                             <lay:LayTabItem Header="文本统计">
                                 <Grid>
                                     <Grid.RowDefinitions>
