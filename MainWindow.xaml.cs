@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using WorkTimeWPF.Models;
@@ -16,6 +18,9 @@ namespace WorkTimeWPF
 {
     public partial class MainWindow : Window
     {
+        // 常量定义
+        private const string WUAI_POJIE_URL = "http://www.eersoft.top";
+        
         private DatabaseManager _databaseManager;
         private DispatcherTimer _timer;
         private DispatcherTimer _currentTimeTimer;
@@ -1080,8 +1085,9 @@ namespace WorkTimeWPF
 
         private void InitializeTheme()
         {
-            // 设置默认主题为Light
-            ApplyTheme("Light");
+            // 从配置文件加载主题设置
+            var config = ConfigManager.GetConfig();
+            ApplyTheme(config.Theme);
             UpdateThemeButtonStates();
         }
 
@@ -1091,6 +1097,9 @@ namespace WorkTimeWPF
             {
                 ApplyTheme(themeName);
                 UpdateThemeButtonStates();
+                
+                // 保存主题设置到配置文件
+                ConfigManager.UpdateTheme(themeName);
             }
         }
 
@@ -1112,18 +1121,6 @@ namespace WorkTimeWPF
                     DangerColor = "#dc3545",
                     TextColor = "#2c3e50",
                     SecondaryTextColor = "#6c757d"
-                },
-                ["Dark"] = new ThemeColors
-                {
-                    Background = "#1a1a1a",
-                    HeaderBackground = "#000000",
-                    CardBackground = "#2d2d2d",
-                    StatusBarBackground = "#000000",
-                    PrimaryColor = "#0d6efd",
-                    SuccessColor = "#198754",
-                    DangerColor = "#dc3545",
-                    TextColor = "#ffffff",
-                    SecondaryTextColor = "#adb5bd"
                 },
                 ["Blue"] = new ThemeColors
                 {
@@ -1203,7 +1200,6 @@ namespace WorkTimeWPF
         {
             // 重置所有按钮的选中状态
             LightThemeButton.Tag = LightThemeButton.Tag?.ToString() == "Selected" ? "Light" : LightThemeButton.Tag;
-            DarkThemeButton.Tag = DarkThemeButton.Tag?.ToString() == "Selected" ? "Dark" : DarkThemeButton.Tag;
             BlueThemeButton.Tag = BlueThemeButton.Tag?.ToString() == "Selected" ? "Blue" : BlueThemeButton.Tag;
             GreenThemeButton.Tag = GreenThemeButton.Tag?.ToString() == "Selected" ? "Green" : GreenThemeButton.Tag;
             PurpleThemeButton.Tag = PurpleThemeButton.Tag?.ToString() == "Selected" ? "Purple" : PurpleThemeButton.Tag;
@@ -1214,9 +1210,6 @@ namespace WorkTimeWPF
                 case "Light":
                     LightThemeButton.Tag = "Selected";
                     break;
-                case "Dark":
-                    DarkThemeButton.Tag = "Selected";
-                    break;
                 case "Blue":
                     BlueThemeButton.Tag = "Selected";
                     break;
@@ -1226,6 +1219,23 @@ namespace WorkTimeWPF
                 case "Purple":
                     PurpleThemeButton.Tag = "Selected";
                     break;
+            }
+        }
+
+        private void WuaiPojieLink_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // 使用默认浏览器打开链接
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = WUAI_POJIE_URL,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"无法打开链接: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

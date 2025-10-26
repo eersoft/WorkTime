@@ -13,7 +13,6 @@
         <!-- 主题配色方案 -->
         <x:Array x:Key="ColorThemes" Type="sys:String" xmlns:sys="clr-namespace:System;assembly=mscorlib">
             <sys:String>Light</sys:String>
-            <sys:String>Dark</sys:String>
             <sys:String>Blue</sys:String>
             <sys:String>Green</sys:String>
             <sys:String>Purple</sys:String>
@@ -22,9 +21,6 @@
         <!-- 主题颜色定义 -->
         <Style x:Key="LightTheme" TargetType="FrameworkElement">
             <Setter Property="Tag" Value="Light"/>
-        </Style>
-        <Style x:Key="DarkTheme" TargetType="FrameworkElement">
-            <Setter Property="Tag" Value="Dark"/>
         </Style>
         <Style x:Key="BlueTheme" TargetType="FrameworkElement">
             <Setter Property="Tag" Value="Blue"/>
@@ -738,9 +734,13 @@
                 
                 <!-- 主题切换按钮组 -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="主题:" Foreground="White" VerticalAlignment="Center" Margin="0,0,5,0" FontSize="12"/>
+                    <TextBlock Margin="0,0,15,0" FontSize="12" VerticalAlignment="Center">
+                        <Hyperlink x:Name="WuaiPojieLink" Click="WuaiPojieLink_Click" 
+                                   Foreground="#ccc" TextDecorations="None">
+                            @吾爱破解
+                        </Hyperlink>
+                    </TextBlock>
                     <Button x:Name="LightThemeButton" Style="{StaticResource LightThemeButton}" Click="ThemeButton_Click" Tag="Light"/>
-                    <Button x:Name="DarkThemeButton" Style="{StaticResource DarkThemeButton}" Click="ThemeButton_Click" Tag="Dark"/>
                     <Button x:Name="BlueThemeButton" Style="{StaticResource BlueThemeButton}" Click="ThemeButton_Click" Tag="Blue"/>
                     <Button x:Name="GreenThemeButton" Style="{StaticResource GreenThemeButton}" Click="ThemeButton_Click" Tag="Green"/>
                     <Button x:Name="PurpleThemeButton" Style="{StaticResource PurpleThemeButton}" Click="ThemeButton_Click" Tag="Purple"/>
