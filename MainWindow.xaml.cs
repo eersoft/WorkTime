@@ -1063,23 +1063,40 @@ namespace WorkTimeWPF
             }
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             // 检查是否有正在进行的计时器
             if (_activeTimer != null)
             {
-                var result = CustomMessageBox.Show("有任务正在计时，确定要关闭应用程序吗?", 
+                var result = CustomMessageBox.Show("有任务正在计时，确定要关闭应用程序吗?\n\n关闭后，当前任务将暂停计时。", 
                     "确认关闭", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    _databaseManager.PauseTimer(_activeTimer.RecordId);
+                    try
+                    {
+                        _databaseManager.PauseTimer(_activeTimer.RecordId);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"暂停计时器时发生错误: {ex.Message}");
+                    }
                 }
                 else
                 {
+                    // 取消关闭操作
+                    e.Cancel = true;
                     return;
                 }
             }
 
+            // 停止定时器
+            _timer?.Stop();
+            _currentTimeTimer?.Stop();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // 清理资源
             _timer?.Stop();
             _currentTimeTimer?.Stop();
             base.OnClosed(e);
@@ -1420,6 +1437,34 @@ namespace WorkTimeWPF
             catch (Exception ex)
             {
                 CustomMessageBox.Show($"无法打开链接: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void HelpLink_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // 获取help.html文件的完整路径
+                string helpFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "help.html");
+                
+                // 检查文件是否存在
+                if (File.Exists(helpFilePath))
+                {
+                    // 使用默认浏览器打开帮助文档
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = helpFilePath,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    CustomMessageBox.Show("帮助文档文件不存在，请确保help.html文件在程序目录中。", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show($"无法打开帮助文档: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

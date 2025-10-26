@@ -7,7 +7,8 @@
         MinHeight="600" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
         Background="#f5f5f5"
-        Icon="main.ico">
+        Icon="main.ico"
+        Closing="MainWindow_Closing">
 
     <Window.Resources>
         <!-- 主题配色方案 -->
@@ -766,6 +767,12 @@
                 
                 <!-- 主题切换按钮组 -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Margin="0,0,15,0" FontSize="12" VerticalAlignment="Center">
+                        <Hyperlink x:Name="HelpLink" Click="HelpLink_Click" 
+                                   Foreground="#ccc" TextDecorations="None">
+                            📖 帮助
+                        </Hyperlink>
+                    </TextBlock>
                     <TextBlock Margin="0,0,15,0" FontSize="12" VerticalAlignment="Center">
                         <Hyperlink x:Name="WuaiPojieLink" Click="WuaiPojieLink_Click" 
                                    Foreground="#ccc" TextDecorations="None">

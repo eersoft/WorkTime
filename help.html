@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkTime - 工作时间记录工具 帮助文档</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #3498db;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .feature-box {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .button-demo {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        .icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+        ul, ol {
+            padding-left: 25px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        .tip {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .warning {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .code {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            padding: 2px 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WorkTime - 工作时间记录工具 帮助文档</h1>
+        
+        <h2>📋 软件简介</h2>
+        <p>WorkTime 是一款基于 WPF 开发的工作时间记录和任务管理工具，帮助您高效地跟踪和管理工作任务的时间消耗。软件采用现代化的界面设计，支持多种主题配色，提供直观的数据统计和可视化图表功能。</p>
+        
+        <h2>🚀 主要功能</h2>
+        
+        <h3>1. 任务管理</h3>
+        <div class="feature-box">
+            <h4>任务操作</h4>
+            <ul>
+                <li><span class="button-demo">➕ 添加任务</span> - 创建新的工作任务</li>
+                <li><span class="button-demo">🗑️ 删除任务</span> - 删除不需要的任务（需先选择任务）</li>
+                <li><span class="button-demo">✅ 任务已完成</span> - 标记任务为完成状态</li>
+            </ul>
+            
+            <h4>任务状态</h4>
+            <ul>
+                <li><strong>进行中</strong> - 正在进行的任务</li>
+                <li><strong>已完成</strong> - 已完成的任务</li>
+            </ul>
+        </div>
+        
+        <h3>2. 时间记录</h3>
+        <div class="feature-box">
+            <h4>计时功能</h4>
+            <ul>
+                <li><span class="button-demo">⏱️ 开始计时</span> - 开始记录任务时间</li>
+                <li><span class="button-demo">⏸️ 暂停计时</span> - 暂停当前计时</li>
+                <li><span class="button-demo">⏹️ 停止计时</span> - 停止计时并保存记录</li>
+            </ul>
+            
+            <h4>时间显示</h4>
+            <ul>
+                <li>实时显示当前计时：<span class="code">00:00:00</span></li>
+                <li>显示任务总耗时</li>
+                <li>显示会话次数</li>
+            </ul>
+        </div>
+        
+        <h3>3. 备注管理</h3>
+        <div class="feature-box">
+            <p>为每个任务添加备注信息，记录工作细节、问题或想法：</p>
+            <ul>
+                <li>选择任务后，在备注输入框中输入内容</li>
+                <li><span class="button-demo">💾 保存备注</span> - 保存备注到数据库</li>
+                <li>备注会与任务关联，便于后续查看</li>
+            </ul>
+        </div>
+        
+        <h3>4. 统计分析</h3>
+        <div class="feature-box">
+            <h4>统计信息</h4>
+            <ul>
+                <li><strong>总工作时间</strong> - 显示所有任务的总耗时</li>
+                <li><strong>任务数量</strong> - 显示任务总数和已完成数量</li>
+                <li><strong>当前活动任务</strong> - 显示正在进行的任务</li>
+            </ul>
+            
+            <h4>时间段筛选</h4>
+            <p>支持按不同时间段查看统计数据：</p>
+            <ul>
+                <li>今日、昨日</li>
+                <li>本周、上周（周一为一周开始）</li>
+                <li>本月、上月</li>
+                <li>今年、去年</li>
+            </ul>
+            
+            <h4>数据可视化</h4>
+            <ul>
+                <li><strong>任务对比图表</strong> - 显示各任务的时间对比</li>
+                <li><strong>总时长统计图表</strong> - 显示时间趋势</li>
+                <li>支持柱状图和折线图两种显示方式</li>
+            </ul>
+        </div>
+        
+        <h3>5. 数据导出</h3>
+        <div class="feature-box">
+            <p><span class="button-demo">📤 导出数据</span> - 将统计数据导出为 CSV 文件</p>
+            <ul>
+                <li>导出内容包括：任务名称、总耗时、会话次数、状态</li>
+                <li>支持按选择的时间段导出</li>
+                <li>文件保存为 CSV 格式，可用 Excel 打开</li>
+            </ul>
+        </div>
+        
+        <h3>6. 主题切换</h3>
+        <div class="feature-box">
+            <p>软件提供多种主题配色方案：</p>
+            <ul>
+                <li><strong>Light</strong> - 浅色主题（默认）</li>
+                <li><strong>Blue</strong> - 蓝色主题</li>
+                <li><strong>Green</strong> - 绿色主题</li>
+                <li><strong>Purple</strong> - 紫色主题</li>
+            </ul>
+            <p>主题设置会自动保存，下次启动时保持选择的主题。</p>
+        </div>
+        
+        <h2>🎯 使用指南</h2>
+        
+        <h3>快速开始</h3>
+        <ol>
+            <li><strong>添加任务</strong>：点击"➕ 添加任务"按钮，输入任务名称</li>
+            <li><strong>开始计时</strong>：选择任务后，点击"⏱️ 开始计时"</li>
+            <li><strong>暂停/停止</strong>：根据需要暂停或停止计时</li>
+            <li><strong>完成任务</strong>：任务完成后，点击"✅ 任务已完成"</li>
+            <li><strong>查看统计</strong>：在右侧面板查看时间统计和图表</li>
+        </ol>
+        
+        <h3>界面布局</h3>
+        <table>
+            <tr>
+                <th>区域</th>
+                <th>功能</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td>左侧面板</td>
+                <td>任务管理</td>
+                <td>任务列表、计时控制、备注输入</td>
+            </tr>
+            <tr>
+                <td>右侧面板</td>
+                <td>数据展示</td>
+                <td>时间记录、统计分析、图表</td>
+            </tr>
+            <tr>
+                <td>底部状态栏</td>
+                <td>系统信息</td>
+                <td>状态显示、主题切换、帮助链接</td>
+            </tr>
+        </table>
+        
+        <h2>💡 使用技巧</h2>
+        
+        <div class="tip">
+            <h4>💡 小贴士</h4>
+            <ul>
+                <li><strong>任务命名</strong>：使用清晰、具体的任务名称，便于后续查找和统计</li>
+                <li><strong>及时记录</strong>：建议在开始工作时立即开始计时，避免遗漏</li>
+                <li><strong>备注记录</strong>：利用备注功能记录工作细节，便于回顾和总结</li>
+                <li><strong>定期导出</strong>：定期导出数据备份，防止数据丢失</li>
+                <li><strong>主题选择</strong>：选择适合的主题，提高使用体验</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <h4>⚠️ 注意事项</h4>
+            <ul>
+                <li><strong>数据安全</strong>：软件使用 SQLite 数据库存储数据，请定期备份数据库文件</li>
+                <li><strong>任务删除</strong>：删除任务会同时删除相关的时间记录，请谨慎操作</li>
+                <li><strong>计时切换</strong>：切换任务时会自动暂停当前计时，避免重复计时</li>
+                <li><strong>窗口关闭</strong>：关闭程序时会提示保存正在进行的计时</li>
+            </ul>
+        </div>
+        
+        <h2>🔧 技术信息</h2>
+        <div class="feature-box">
+            <h4>系统要求</h4>
+            <ul>
+                <li>操作系统：Windows 10 或更高版本</li>
+                <li>框架：.NET 8.0 Runtime</li>
+                <li>内存：建议 4GB 以上</li>
+                <li>存储：至少 100MB 可用空间</li>
+            </ul>
+            
+            <h4>数据存储</h4>
+            <ul>
+                <li>数据库：SQLite 数据库文件</li>
+                <li>配置文件：JSON 格式配置文件</li>
+                <li>数据位置：程序运行目录</li>
+            </ul>
+        </div>
+        
+        <h2>📞 支持与反馈</h2>
+        <p>如果您在使用过程中遇到问题或有改进建议，欢迎通过以下方式联系：</p>
+        <ul>            
+            <li>查看状态栏中的"@吾爱破解"链接</li>
+        </ul>
+        
+        <div class="footer">
+            <p>WorkTime - 工作时间记录工具 v1.0.0</p>
+            <p>© 2024 EERSOFT</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Media;
 
@@ -12,25 +13,42 @@ namespace WorkTimeWPF
 
         public static MessageBoxResult Show(string messageBoxText, string caption = "消息", MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage icon = MessageBoxImage.Information)
         {
-            var messageBox = new CustomMessageBox();
-            messageBox._messageBoxText = messageBoxText;
-            messageBox._caption = caption;
-            messageBox._button = button;
-            messageBox._icon = icon;
-            
-            // 设置Owner为主窗口
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow != null)
+            try
             {
-                messageBox.Owner = mainWindow;
+                var messageBox = new CustomMessageBox();
+                messageBox._messageBoxText = messageBoxText;
+                messageBox._caption = caption;
+                messageBox._button = button;
+                messageBox._icon = icon;
+                
+                // 设置Owner为主窗口，但要避免设置为自身
+                var mainWindow = Application.Current.MainWindow;
+                if (mainWindow != null && mainWindow != messageBox)
+                {
+                    messageBox.Owner = mainWindow;
+                }
+                
+                // 调试信息
+                System.Diagnostics.Debug.WriteLine($"Show called with messageBoxText: {messageBoxText}");
+                System.Diagnostics.Debug.WriteLine($"Show called with caption: {caption}");
+                
+                messageBox.ShowDialog();
+                return messageBox.Result;
             }
-            
-            // 调试信息
-            System.Diagnostics.Debug.WriteLine($"Show called with messageBoxText: {messageBoxText}");
-            System.Diagnostics.Debug.WriteLine($"Show called with caption: {caption}");
-            
-            messageBox.ShowDialog();
-            return messageBox.Result;
+            catch (Exception ex)
+            {
+                // 如果自定义消息框失败，退回系统默认消息框
+                System.Diagnostics.Debug.WriteLine($"CustomMessageBox failed: {ex.Message}");
+                try
+                {
+                    return System.Windows.MessageBox.Show(messageBoxText, caption, button, icon);
+                }
+                catch
+                {
+                    // 如果系统消息框也失败，返回默认结果
+                    return MessageBoxResult.OK;
+                }
+            }
         }
 
         public MessageBoxResult Result { get; private set; } = MessageBoxResult.OK;
