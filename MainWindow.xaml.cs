@@ -22,6 +22,7 @@ namespace WorkTimeWPF
         private Task _selectedTask;
         private TimeRecord _activeTimer;
         private bool _timerRunning = false;
+        private string _currentTheme = "Light";
 
         // 图表数据属性
         public SeriesCollection TaskComparisonSeries { get; set; }
@@ -45,6 +46,9 @@ namespace WorkTimeWPF
 
                 // 初始化图表数据
                 InitializeCharts();
+
+                // 初始化主题
+                InitializeTheme();
 
                 // 初始化计时器
                 _timer = new DispatcherTimer();
@@ -1071,5 +1075,174 @@ namespace WorkTimeWPF
             _currentTimeTimer?.Stop();
             base.OnClosed(e);
         }
+
+        #region 主题切换功能
+
+        private void InitializeTheme()
+        {
+            // 设置默认主题为Light
+            ApplyTheme("Light");
+            UpdateThemeButtonStates();
+        }
+
+        private void ThemeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is string themeName)
+            {
+                ApplyTheme(themeName);
+                UpdateThemeButtonStates();
+            }
+        }
+
+        private void ApplyTheme(string themeName)
+        {
+            _currentTheme = themeName;
+            
+            // 定义各主题的颜色
+            var themes = new Dictionary<string, ThemeColors>
+            {
+                ["Light"] = new ThemeColors
+                {
+                    Background = "#f5f5f5",
+                    HeaderBackground = "#2c3e50",
+                    CardBackground = "White",
+                    StatusBarBackground = "#34495e",
+                    PrimaryColor = "#007bff",
+                    SuccessColor = "#28a745",
+                    DangerColor = "#dc3545",
+                    TextColor = "#2c3e50",
+                    SecondaryTextColor = "#6c757d"
+                },
+                ["Dark"] = new ThemeColors
+                {
+                    Background = "#1a1a1a",
+                    HeaderBackground = "#000000",
+                    CardBackground = "#2d2d2d",
+                    StatusBarBackground = "#000000",
+                    PrimaryColor = "#0d6efd",
+                    SuccessColor = "#198754",
+                    DangerColor = "#dc3545",
+                    TextColor = "#ffffff",
+                    SecondaryTextColor = "#adb5bd"
+                },
+                ["Blue"] = new ThemeColors
+                {
+                    Background = "#e3f2fd",
+                    HeaderBackground = "#1976d2",
+                    CardBackground = "#ffffff",
+                    StatusBarBackground = "#1565c0",
+                    PrimaryColor = "#1976d2",
+                    SuccessColor = "#388e3c",
+                    DangerColor = "#d32f2f",
+                    TextColor = "#1565c0",
+                    SecondaryTextColor = "#1976d2"
+                },
+                ["Green"] = new ThemeColors
+                {
+                    Background = "#e8f5e8",
+                    HeaderBackground = "#2e7d32",
+                    CardBackground = "#ffffff",
+                    StatusBarBackground = "#1b5e20",
+                    PrimaryColor = "#2e7d32",
+                    SuccessColor = "#388e3c",
+                    DangerColor = "#d32f2f",
+                    TextColor = "#1b5e20",
+                    SecondaryTextColor = "#2e7d32"
+                },
+                ["Purple"] = new ThemeColors
+                {
+                    Background = "#f3e5f5",
+                    HeaderBackground = "#7b1fa2",
+                    CardBackground = "#ffffff",
+                    StatusBarBackground = "#4a148c",
+                    PrimaryColor = "#7b1fa2",
+                    SuccessColor = "#388e3c",
+                    DangerColor = "#d32f2f",
+                    TextColor = "#4a148c",
+                    SecondaryTextColor = "#7b1fa2"
+                }
+            };
+
+            if (themes.TryGetValue(themeName, out var colors))
+            {
+                ApplyColorsToUI(colors);
+            }
+        }
+
+        private void ApplyColorsToUI(ThemeColors colors)
+        {
+            // 应用主窗口背景色
+            this.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString(colors.Background);
+
+            // 应用顶部标题栏背景色
+            var headerBorder = FindName("HeaderBorder") as Border;
+            if (headerBorder != null)
+            {
+                headerBorder.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString(colors.HeaderBackground);
+            }
+
+            // 应用状态栏背景色
+            var statusBarBorder = FindName("StatusBarBorder") as Border;
+            if (statusBarBorder != null)
+            {
+                statusBarBorder.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString(colors.StatusBarBackground);
+            }
+
+            // 更新按钮样式中的颜色
+            UpdateButtonColors(colors);
+        }
+
+        private void UpdateButtonColors(ThemeColors colors)
+        {
+            // 这里可以通过动态更新样式来改变按钮颜色
+            // 由于WPF的限制，我们需要重新定义样式或使用其他方法
+            // 暂时先记录颜色，实际应用中可能需要更复杂的实现
+        }
+
+        private void UpdateThemeButtonStates()
+        {
+            // 重置所有按钮的选中状态
+            LightThemeButton.Tag = LightThemeButton.Tag?.ToString() == "Selected" ? "Light" : LightThemeButton.Tag;
+            DarkThemeButton.Tag = DarkThemeButton.Tag?.ToString() == "Selected" ? "Dark" : DarkThemeButton.Tag;
+            BlueThemeButton.Tag = BlueThemeButton.Tag?.ToString() == "Selected" ? "Blue" : BlueThemeButton.Tag;
+            GreenThemeButton.Tag = GreenThemeButton.Tag?.ToString() == "Selected" ? "Green" : GreenThemeButton.Tag;
+            PurpleThemeButton.Tag = PurpleThemeButton.Tag?.ToString() == "Selected" ? "Purple" : PurpleThemeButton.Tag;
+
+            // 设置当前主题按钮为选中状态
+            switch (_currentTheme)
+            {
+                case "Light":
+                    LightThemeButton.Tag = "Selected";
+                    break;
+                case "Dark":
+                    DarkThemeButton.Tag = "Selected";
+                    break;
+                case "Blue":
+                    BlueThemeButton.Tag = "Selected";
+                    break;
+                case "Green":
+                    GreenThemeButton.Tag = "Selected";
+                    break;
+                case "Purple":
+                    PurpleThemeButton.Tag = "Selected";
+                    break;
+            }
+        }
+
+        #endregion
+    }
+
+    // 主题颜色定义类
+    public class ThemeColors
+    {
+        public string Background { get; set; }
+        public string HeaderBackground { get; set; }
+        public string CardBackground { get; set; }
+        public string StatusBarBackground { get; set; }
+        public string PrimaryColor { get; set; }
+        public string SuccessColor { get; set; }
+        public string DangerColor { get; set; }
+        public string TextColor { get; set; }
+        public string SecondaryTextColor { get; set; }
     }
 }

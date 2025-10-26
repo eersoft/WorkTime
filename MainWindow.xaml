@@ -10,6 +10,32 @@
         Icon="main.ico">
 
     <Window.Resources>
+        <!-- 主题配色方案 -->
+        <x:Array x:Key="ColorThemes" Type="sys:String" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+            <sys:String>Light</sys:String>
+            <sys:String>Dark</sys:String>
+            <sys:String>Blue</sys:String>
+            <sys:String>Green</sys:String>
+            <sys:String>Purple</sys:String>
+        </x:Array>
+
+        <!-- 主题颜色定义 -->
+        <Style x:Key="LightTheme" TargetType="FrameworkElement">
+            <Setter Property="Tag" Value="Light"/>
+        </Style>
+        <Style x:Key="DarkTheme" TargetType="FrameworkElement">
+            <Setter Property="Tag" Value="Dark"/>
+        </Style>
+        <Style x:Key="BlueTheme" TargetType="FrameworkElement">
+            <Setter Property="Tag" Value="Blue"/>
+        </Style>
+        <Style x:Key="GreenTheme" TargetType="FrameworkElement">
+            <Setter Property="Tag" Value="Green"/>
+        </Style>
+        <Style x:Key="PurpleTheme" TargetType="FrameworkElement">
+            <Setter Property="Tag" Value="Purple"/>
+        </Style>
+
         <!-- 样式定义 -->
         <Style x:Key="HeaderStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"/>
@@ -18,58 +44,266 @@
             <Setter Property="Margin" Value="0,0,0,10"/>
         </Style>
 
+        <!-- 简约轻量按钮样式 -->
         <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#3498db"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="#3498db"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Background" Value="#f8f9fa"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#e9ecef"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#dee2e6"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#f8f9fa"/>
+                                <Setter Property="Foreground" Value="#adb5bd"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="CompleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#27ae60"/>
-            <Setter Property="BorderBrush" Value="#27ae60"/>
+            <Setter Property="Background" Value="#d4edda"/>
+            <Setter Property="Foreground" Value="#155724"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#c3e6cb"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#b8dacc"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#e74c3c"/>
-            <Setter Property="BorderBrush" Value="#e74c3c"/>
+            <Setter Property="Background" Value="#f8d7da"/>
+            <Setter Property="Foreground" Value="#721c24"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#f5c6cb"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#f1b0b7"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="TimerButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="#007bff"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#0056b3"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#004085"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
-        <!-- LayButton样式 - 无背景色，有边框 -->
+        <!-- LayButton样式 - 简约轻量设计 -->
         <Style x:Key="LayButtonStyle" TargetType="lay:LayButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="#3498db"/>
-            <Setter Property="Foreground" Value="#3498db"/>
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#f8f9fa"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="lay:LayButton">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#e9ecef"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#dee2e6"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#f8f9fa"/>
+                                <Setter Property="Foreground" Value="#adb5bd"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="LayButtonPrimaryStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="BorderBrush" Value="#3498db"/>
-            <Setter Property="Foreground" Value="#3498db"/>
+            <Setter Property="Background" Value="#007bff"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#0056b3"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#004085"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="LayButtonDangerStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="BorderBrush" Value="#e74c3c"/>
-            <Setter Property="Foreground" Value="#e74c3c"/>
+            <Setter Property="Background" Value="#dc3545"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#c82333"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#bd2130"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="LayButtonDefaultStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="BorderBrush" Value="#95a5a6"/>
-            <Setter Property="Foreground" Value="#95a5a6"/>
+            <Setter Property="Background" Value="#6c757d"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#5a6268"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#545b62"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 特殊按钮样式 -->
+        <Style x:Key="ToggleButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="#e9ecef"/>
+            <Setter Property="Foreground" Value="#6c757d"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="MinWidth" Value="30"/>
+            <Setter Property="MinHeight" Value="30"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#dee2e6"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#ced4da"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="IconButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#6c757d"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="MinWidth" Value="32"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#f8f9fa"/>
+                    <Setter Property="Foreground" Value="#495057"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#e9ecef"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- 主题切换按钮样式 -->
+        <Style x:Key="ThemeButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#ffffff"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="3"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <Grid>
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                                <!-- 选中状态的对勾 -->
+                                <Path x:Name="CheckMark" 
+                                      Data="M6,10 L9,13 L14,6" 
+                                      Stroke="White" 
+                                      StrokeThickness="2" 
+                                      Visibility="Collapsed"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Selected">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 各主题按钮的具体颜色 -->
+        <Style x:Key="LightThemeButton" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
+            <Setter Property="Background" Value="#f8f9fa"/>
+            <Setter Property="BorderBrush" Value="#dee2e6"/>
+        </Style>
+
+        <Style x:Key="DarkThemeButton" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
+            <Setter Property="Background" Value="#343a40"/>
+            <Setter Property="BorderBrush" Value="#495057"/>
+        </Style>
+
+        <Style x:Key="BlueThemeButton" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
+            <Setter Property="Background" Value="#007bff"/>
+            <Setter Property="BorderBrush" Value="#0056b3"/>
+        </Style>
+
+        <Style x:Key="GreenThemeButton" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
+            <Setter Property="Background" Value="#28a745"/>
+            <Setter Property="BorderBrush" Value="#1e7e34"/>
+        </Style>
+
+        <Style x:Key="PurpleThemeButton" TargetType="Button" BasedOn="{StaticResource ThemeButtonStyle}">
+            <Setter Property="Background" Value="#6f42c1"/>
+            <Setter Property="BorderBrush" Value="#5a32a3"/>
         </Style>
 
         <!-- DataGrid样式 - 文本竖直居中和固定表头 -->
@@ -110,7 +344,7 @@
         </Grid.RowDefinitions>
 
         <!-- 顶部标题栏 -->
-        <Border Grid.Row="0" Background="#2c3e50" Padding="15,10">
+        <Border x:Name="HeaderBorder" Grid.Row="0" Background="#2c3e50" Padding="15,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -169,8 +403,8 @@
 
                                 <!-- 任务控制按钮 -->
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,5">
-                                    <lay:LayButton x:Name="AddTaskButton" Content="➕ 添加任务" Style="{StaticResource LayButtonPrimaryStyle}" Click="AddTaskButton_Click" Margin="0,0,5,0"/>
-                                    <lay:LayButton x:Name="DeleteTaskButton" Content="🗑️ 删除任务" Style="{StaticResource LayButtonDangerStyle}" Click="DeleteTaskButton_Click" IsEnabled="False" Margin="5,0,5,0"/>
+                                    <lay:LayButton x:Name="AddTaskButton" Content="添加任务" Style="{StaticResource LayButtonPrimaryStyle}" Click="AddTaskButton_Click" Margin="0,0,5,0"/>
+                                    <lay:LayButton x:Name="DeleteTaskButton" Content="删除任务" Style="{StaticResource LayButtonDangerStyle}" Click="DeleteTaskButton_Click" IsEnabled="False" Margin="5,0,5,0"/>
                                 </StackPanel>
 
                                 <!-- 任务列表 -->
@@ -300,8 +534,8 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="时间记录" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
-                            <Button x:Name="ToggleTimeRecordsButton" Content="▼" Style="{StaticResource ButtonStyle}" 
-                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click" FontSize="12" Padding="8,4" Width="30" Height="25"/>
+                            <Button x:Name="ToggleTimeRecordsButton" Content="▼" Style="{StaticResource ToggleButtonStyle}" 
+                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click"/>
                         </Grid>
 
                         <Grid Grid.Row="1" x:Name="TimeRecordsHeaderGrid">
@@ -354,8 +588,8 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Text="统计分析" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
-                            <Button x:Name="ToggleStatisticsButton" Content="▼" Style="{StaticResource ButtonStyle}" 
-                                    Grid.Column="1" Click="ToggleStatisticsButton_Click" FontSize="12" Padding="8,4" Width="30" Height="25"/>
+                            <Button x:Name="ToggleStatisticsButton" Content="▼" Style="{StaticResource ToggleButtonStyle}" 
+                                    Grid.Column="1" Click="ToggleStatisticsButton_Click"/>
                         </Grid>
 
                         <Grid Grid.Row="1" x:Name="StatisticsControlsGrid">
@@ -376,7 +610,7 @@
                                     <ComboBoxItem Content="今年"/>
                                     <ComboBoxItem Content="去年"/>
                                 </ComboBox>
-                                <Button x:Name="ExportButton" Content="📊 导出数据" Style="{StaticResource ButtonStyle}" 
+                                <Button x:Name="ExportButton" Content="导出数据" Style="{StaticResource IconButtonStyle}" 
                                         Margin="10,0,0,0" Click="ExportButton_Click"/>
                             </StackPanel>
                         </Grid>
@@ -493,9 +727,24 @@
         </Grid>
 
         <!-- 底部状态栏 -->
-        <Border Grid.Row="2" Background="#34495e" Padding="10,5">
+        <Border x:Name="StatusBarBorder" Grid.Row="2" Background="#34495e" Padding="10,5">
             <Grid>
-                <TextBlock x:Name="StatusLabel" Text="就绪" Foreground="White" VerticalAlignment="Center"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock x:Name="StatusLabel" Text="就绪" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
+                
+                <!-- 主题切换按钮组 -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="主题:" Foreground="White" VerticalAlignment="Center" Margin="0,0,5,0" FontSize="12"/>
+                    <Button x:Name="LightThemeButton" Style="{StaticResource LightThemeButton}" Click="ThemeButton_Click" Tag="Light"/>
+                    <Button x:Name="DarkThemeButton" Style="{StaticResource DarkThemeButton}" Click="ThemeButton_Click" Tag="Dark"/>
+                    <Button x:Name="BlueThemeButton" Style="{StaticResource BlueThemeButton}" Click="ThemeButton_Click" Tag="Blue"/>
+                    <Button x:Name="GreenThemeButton" Style="{StaticResource GreenThemeButton}" Click="ThemeButton_Click" Tag="Green"/>
+                    <Button x:Name="PurpleThemeButton" Style="{StaticResource PurpleThemeButton}" Click="ThemeButton_Click" Tag="Purple"/>
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>
