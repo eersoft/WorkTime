@@ -6,7 +6,8 @@
         Title="WorkTime - 工作时间记录" Height="829" Width="1390"
         MinHeight="600" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
-        Background="#f5f5f5">
+        Background="#f5f5f5"
+        Icon="main.ico">
 
     <Window.Resources>
         <!-- 样式定义 -->
@@ -111,8 +112,19 @@
         <!-- 顶部标题栏 -->
         <Border Grid.Row="0" Background="#2c3e50" Padding="15,10">
             <Grid>
-                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
-                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- 时钟图标 -->
+                <Canvas Grid.Column="0" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <Path Fill="White" Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
+                </Canvas>
+                
+                <TextBlock Text="WorkTime" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center" Grid.Column="1"/>
+                <TextBlock x:Name="CurrentTimeLabel" Text="" FontSize="12" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2"/>
             </Grid>
         </Border>
 
