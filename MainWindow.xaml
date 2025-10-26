@@ -44,7 +44,7 @@
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="12,8"/>
             <Setter Property="Margin" Value="4"/>
-            <Setter Property="Background" Value="#f8f9fa"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#495057"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -63,13 +63,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#e9ecef"/>
+                                <Setter Property="Background" Value="#f8f9fa"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#dee2e6"/>
+                                <Setter Property="Background" Value="#e9ecef"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="#f8f9fa"/>
+                                <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="Foreground" Value="#adb5bd"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -79,41 +79,51 @@
         </Style>
 
         <Style x:Key="CompleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#d4edda"/>
-            <Setter Property="Foreground" Value="#155724"/>
+            <Setter Property="Foreground" Value="#28a745"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#c3e6cb"/>
+                    <Setter Property="Background" Value="#d4edda"/>
+                    <Setter Property="Foreground" Value="#155724"/>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#b8dacc"/>
+                    <Setter Property="Background" Value="#c3e6cb"/>
+                    <Setter Property="Foreground" Value="#155724"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#f8d7da"/>
-            <Setter Property="Foreground" Value="#721c24"/>
+            <Setter Property="Foreground" Value="#dc3545"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#f5c6cb"/>
+                    <Setter Property="Background" Value="#f8d7da"/>
+                    <Setter Property="Foreground" Value="#721c24"/>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#f1b0b7"/>
+                    <Setter Property="Background" Value="#f5c6cb"/>
+                    <Setter Property="Foreground" Value="#721c24"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="TimerButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#2c3e50"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Padding" Value="16,10"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e8eaed"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#d1d8e0"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- LayButton样式 - 简约轻量设计 -->
         <Style x:Key="LayButtonStyle" TargetType="lay:LayButton">
-            <Setter Property="Background" Value="#f8f9fa"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="#495057"/>
             <Setter Property="Padding" Value="12,8"/>
@@ -134,13 +144,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#e9ecef"/>
+                                <Setter Property="Background" Value="#f8f9fa"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#dee2e6"/>
+                                <Setter Property="Background" Value="#e9ecef"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="#f8f9fa"/>
+                                <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="Foreground" Value="#adb5bd"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -150,38 +160,47 @@
         </Style>
 
         <Style x:Key="LayButtonPrimaryStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#2c3e50"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e8eaed"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#d1d8e0"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="LayButtonDangerStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="Background" Value="#dc3545"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#dc3545"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#c82333"/>
+                    <Setter Property="Background" Value="#f8d7da"/>
+                    <Setter Property="Foreground" Value="#721c24"/>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#bd2130"/>
+                    <Setter Property="Background" Value="#f5c6cb"/>
+                    <Setter Property="Foreground" Value="#721c24"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <Style x:Key="LayButtonDefaultStyle" TargetType="lay:LayButton" BasedOn="{StaticResource LayButtonStyle}">
-            <Setter Property="Background" Value="#6c757d"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#6c757d"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#5a6268"/>
+                    <Setter Property="Background" Value="#e9ecef"/>
+                    <Setter Property="Foreground" Value="#495057"/>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#545b62"/>
+                    <Setter Property="Background" Value="#dee2e6"/>
+                    <Setter Property="Foreground" Value="#495057"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <!-- 特殊按钮样式 -->
         <Style x:Key="ToggleButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
-            <Setter Property="Background" Value="#e9ecef"/>
             <Setter Property="Foreground" Value="#6c757d"/>
             <Setter Property="Padding" Value="8,6"/>
             <Setter Property="FontSize" Value="12"/>
@@ -189,10 +208,10 @@
             <Setter Property="MinHeight" Value="30"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#dee2e6"/>
+                    <Setter Property="Background" Value="#e9ecef"/>
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#ced4da"/>
+                    <Setter Property="Background" Value="#dee2e6"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

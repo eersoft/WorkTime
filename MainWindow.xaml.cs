@@ -1237,49 +1237,49 @@ namespace WorkTimeWPF
             {
                 var brushConverter = new BrushConverter();
                 
-                // 更新计时器按钮颜色
+                // 更新计时器按钮颜色 - 文本按钮，悬停时显示80%亮度背景色
                 if (TimerButton != null)
                 {
-                    TimerButton.Background = (Brush)brushConverter.ConvertFromString(colors.PrimaryColor);
+                    TimerButton.Foreground = (Brush)brushConverter.ConvertFromString(colors.PrimaryColor);
                     
-                    // 创建悬停和按下状态的深色版本
-                    var hoverColor = DarkenColor(colors.PrimaryColor, 0.2);
-                    var pressedColor = DarkenColor(colors.PrimaryColor, 0.3);
+                    // 创建80%亮度的背景色
+                    var hoverBackgroundColor = LightenColor(colors.PrimaryColor, 0.8); // 提高80%亮度
+                    var pressedBackgroundColor = LightenColor(colors.PrimaryColor, 0.6); // 提高60%亮度
                     
                     // 设置触发器样式
                     var style = new Style(typeof(Button), TimerButton.Style);
-                    style.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(colors.PrimaryColor)));
+                    style.Setters.Add(new Setter(Button.ForegroundProperty, (Brush)brushConverter.ConvertFromString(colors.PrimaryColor)));
                     
                     var hoverTrigger = new Trigger { Property = Button.IsMouseOverProperty, Value = true };
-                    hoverTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(hoverColor)));
+                    hoverTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(hoverBackgroundColor)));
                     style.Triggers.Add(hoverTrigger);
                     
                     var pressedTrigger = new Trigger { Property = Button.IsPressedProperty, Value = true };
-                    pressedTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(pressedColor)));
+                    pressedTrigger.Setters.Add(new Setter(Button.BackgroundProperty, (Brush)brushConverter.ConvertFromString(pressedBackgroundColor)));
                     style.Triggers.Add(pressedTrigger);
                     
                     TimerButton.Style = style;
                 }
                 
-                // 更新添加任务按钮颜色
+                // 更新添加任务按钮颜色 - 文本按钮，悬停时显示80%亮度背景色
                 if (AddTaskButton != null)
                 {
-                    AddTaskButton.Background = (Brush)brushConverter.ConvertFromString(colors.PrimaryColor);
+                    AddTaskButton.Foreground = (Brush)brushConverter.ConvertFromString(colors.PrimaryColor);
                     
-                    // 创建悬停和按下状态的深色版本
-                    var hoverColor = DarkenColor(colors.PrimaryColor, 0.2);
-                    var pressedColor = DarkenColor(colors.PrimaryColor, 0.3);
+                    // 创建80%亮度的背景色
+                    var hoverBackgroundColor = LightenColor(colors.PrimaryColor, 0.8); // 提高80%亮度
+                    var pressedBackgroundColor = LightenColor(colors.PrimaryColor, 0.6); // 提高60%亮度
                     
                     // 设置触发器样式
                     var style = new Style(typeof(LayUI.Wpf.Controls.LayButton), AddTaskButton.Style);
-                    style.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(colors.PrimaryColor)));
+                    style.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.ForegroundProperty, (Brush)brushConverter.ConvertFromString(colors.PrimaryColor)));
                     
                     var hoverTrigger = new Trigger { Property = LayUI.Wpf.Controls.LayButton.IsMouseOverProperty, Value = true };
-                    hoverTrigger.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(hoverColor)));
+                    hoverTrigger.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(hoverBackgroundColor)));
                     style.Triggers.Add(hoverTrigger);
                     
                     var pressedTrigger = new Trigger { Property = LayUI.Wpf.Controls.LayButton.IsPressedProperty, Value = true };
-                    pressedTrigger.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(pressedColor)));
+                    pressedTrigger.Setters.Add(new Setter(LayUI.Wpf.Controls.LayButton.BackgroundProperty, (Brush)brushConverter.ConvertFromString(pressedBackgroundColor)));
                     style.Triggers.Add(pressedTrigger);
                     
                     AddTaskButton.Style = style;
@@ -1288,6 +1288,37 @@ namespace WorkTimeWPF
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"更新按钮颜色时发生错误: {ex.Message}");
+            }
+        }
+
+        private string LightenColor(string hexColor, double factor)
+        {
+            try
+            {
+                // 移除#号
+                hexColor = hexColor.TrimStart('#');
+                
+                // 解析RGB值
+                int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+                int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+                int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+                
+                // 计算亮色版本（向白色混合）
+                r = (int)(r + (255 - r) * factor);
+                g = (int)(g + (255 - g) * factor);
+                b = (int)(b + (255 - b) * factor);
+                
+                // 确保值在0-255范围内
+                r = Math.Max(0, Math.Min(255, r));
+                g = Math.Max(0, Math.Min(255, g));
+                b = Math.Max(0, Math.Min(255, b));
+                
+                // 转换回十六进制
+                return $"#{r:X2}{g:X2}{b:X2}";
+            }
+            catch
+            {
+                return hexColor; // 如果转换失败，返回原颜色
             }
         }
 
