@@ -1093,8 +1093,19 @@ namespace WorkTimeWPF
 
         private void ThemeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Tag is string themeName)
+            if (sender is Button button && button.Tag is string tagValue)
             {
+                string themeName;
+                
+                // 如果Tag是"Selected"，说明这是当前已选中的主题按钮
+                // 连续点击同一个主题按钮时，不需要重复应用主题
+                if (tagValue == "Selected")
+                {
+                    return; // 直接返回，不执行任何操作
+                }
+                
+                themeName = tagValue;
+                
                 ApplyTheme(themeName);
                 UpdateThemeButtonStates();
                 
