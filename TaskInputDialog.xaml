@@ -7,7 +7,7 @@
         ResizeMode="NoResize"
         Background="#f5f5f5">
     
-    <lay:LayCard Margin="5" Padding="5" CornerRadius="4" Background="White">
+    <Border Margin="5" Padding="5" CornerRadius="4" Background="White">
         <Grid Width="380" Height="133">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -28,5 +28,5 @@
                         Click="OkButton_Click" IsDefault="True" Type="Primary"/>
             </StackPanel>
         </Grid>
-    </lay:LayCard>
+    </Border>
 </Window>
