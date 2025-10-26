@@ -74,7 +74,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"应用程序初始化失败: {ex.Message}\n\n程序将尝试修复数据库并重新启动。", 
+                CustomMessageBox.Show($"应用程序初始化失败: {ex.Message}\n\n程序将尝试修复数据库并重新启动。", 
                     "初始化错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 
                 // 尝试重新初始化数据库
@@ -89,7 +89,7 @@ namespace WorkTimeWPF
                 }
                 catch (Exception retryEx)
                 {
-                    MessageBox.Show($"数据库修复失败: {retryEx.Message}\n\n请检查数据库文件是否损坏。", 
+                    CustomMessageBox.Show($"数据库修复失败: {retryEx.Message}\n\n请检查数据库文件是否损坏。", 
                         "数据库错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -123,7 +123,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"加载任务列表时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"加载任务列表时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -156,7 +156,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"加载已完成任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"加载已完成任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -195,7 +195,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"加载时间记录时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"加载时间记录时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -288,7 +288,7 @@ namespace WorkTimeWPF
                     TimerButton.IsEnabled = true;
                     if (_selectedTask.TaskStatus == "in_progress" && _activeTimer != null && _activeTimer.TaskId == _selectedTask.TaskId)
                     {
-                        TimerButton.Content = "暂停计时";
+                        UpdateTimerButtonContent("暂停计时");
                         if (!_timerRunning)
                         {
                             StartTimerUpdate();
@@ -296,7 +296,7 @@ namespace WorkTimeWPF
                     }
                     else
                     {
-                        TimerButton.Content = "开始计时";
+                        UpdateTimerButtonContent("开始计时");
                         if (_timerRunning)
                         {
                             StopTimerUpdate();
@@ -324,7 +324,7 @@ namespace WorkTimeWPF
                 TaskNameLabel.Text = "未选择任务";
                 TaskStatusLabel.Text = "";
                 TimerButton.IsEnabled = false;
-                TimerButton.Content = "开始计时";
+                UpdateTimerButtonContent("开始计时");
                 CompleteTaskButton.Visibility = Visibility.Collapsed;
                 TimerDisplay.Text = "00:00:00";
                 TotalDurationLabel.Text = "任务总耗时: 00:00:00";
@@ -373,7 +373,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"更新总时间时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"更新总时间时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -511,7 +511,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"加载任务统计时发生错误: {ex.Message}\n\n这可能是由于数据库结构不兼容导致的。\n程序将尝试自动修复数据库结构。", 
+                CustomMessageBox.Show($"加载任务统计时发生错误: {ex.Message}\n\n这可能是由于数据库结构不兼容导致的。\n程序将尝试自动修复数据库结构。", 
                     "数据库错误", MessageBoxButton.OK, MessageBoxImage.Warning);
                 
                 // 清空统计显示
@@ -764,6 +764,7 @@ namespace WorkTimeWPF
         private void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
             var inputDialog = new TaskInputDialog();
+            inputDialog.Owner = this;
             if (inputDialog.ShowDialog() == true)
             {
                 try
@@ -783,7 +784,7 @@ namespace WorkTimeWPF
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"添加任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show($"添加任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -793,11 +794,11 @@ namespace WorkTimeWPF
         {
             if (_selectedTask == null)
             {
-                MessageBox.Show("请先选择一个任务", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("请先选择一个任务", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            var result = MessageBox.Show($"确定要删除任务 '{_selectedTask.TaskName}' 吗?\n注意：删除后无法恢复！", 
+            var result = CustomMessageBox.Show($"确定要删除任务 '{_selectedTask.TaskName}' 吗?\n注意：删除后无法恢复！", 
                 "确认删除", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             
             if (result == MessageBoxResult.Yes)
@@ -820,11 +821,11 @@ namespace WorkTimeWPF
                     _selectedTask = null;
                     UpdateTaskDetails();
                     
-                    MessageBox.Show("任务已删除", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CustomMessageBox.Show("任务已删除", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"删除任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show($"删除任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -851,13 +852,13 @@ namespace WorkTimeWPF
         {
             if (_selectedTask == null)
             {
-                MessageBox.Show("请先选择一个任务", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("请先选择一个任务", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             if (_databaseManager == null)
             {
-                MessageBox.Show("数据库未初始化", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show("数据库未初始化", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -871,7 +872,7 @@ namespace WorkTimeWPF
                         _databaseManager.PauseTimer(_activeTimer.RecordId);
                         _activeTimer = null;
                         if (TimerButton != null)
-                            TimerButton.Content = "开始计时";
+                            UpdateTimerButtonContent("开始计时");
                         StopTimerUpdate();
                         if (TimerDisplay != null)
                             TimerDisplay.Text = "00:00:00";
@@ -879,7 +880,7 @@ namespace WorkTimeWPF
                     else
                     {
                         // 切换到新任务
-                        var result = MessageBox.Show($"当前正在计时: {_activeTimer.TaskName}\n是否要切换到新任务?", 
+                        var result = CustomMessageBox.Show($"当前正在计时: {_activeTimer.TaskName}\n是否要切换到新任务?", 
                             "切换任务", MessageBoxButton.YesNo, MessageBoxImage.Question);
                         if (result == MessageBoxResult.Yes)
                         {
@@ -887,7 +888,7 @@ namespace WorkTimeWPF
                             var recordId = _databaseManager.StartTimer(_selectedTask.TaskId);
                             _activeTimer = _databaseManager.GetActiveTimer();
                             if (TimerButton != null)
-                                TimerButton.Content = "暂停计时";
+                                UpdateTimerButtonContent("暂停计时");
                             StartTimerUpdate();
                         }
                     }
@@ -898,7 +899,7 @@ namespace WorkTimeWPF
                     var recordId = _databaseManager.StartTimer(_selectedTask.TaskId);
                     _activeTimer = _databaseManager.GetActiveTimer();
                     if (TimerButton != null)
-                        TimerButton.Content = "暂停计时";
+                        UpdateTimerButtonContent("暂停计时");
                     StartTimerUpdate();
                 }
 
@@ -907,7 +908,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"操作计时器时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"操作计时器时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -915,17 +916,17 @@ namespace WorkTimeWPF
         {
             if (_selectedTask == null)
             {
-                MessageBox.Show("请先选择一个任务", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("请先选择一个任务", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             if (_selectedTask.TaskStatus == "completed")
             {
-                MessageBox.Show("该任务已经完成", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                CustomMessageBox.Show("该任务已经完成", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            var result = MessageBox.Show($"确定要将任务 '{_selectedTask.TaskName}' 标记为已完成吗?\n\n这将停止当前计时并将任务移到已完成列表中。", 
+            var result = CustomMessageBox.Show($"确定要将任务 '{_selectedTask.TaskName}' 标记为已完成吗?\n\n这将停止当前计时并将任务移到已完成列表中。", 
                 "确认完成", MessageBoxButton.YesNo, MessageBoxImage.Question);
             
             if (result == MessageBoxResult.Yes)
@@ -957,11 +958,11 @@ namespace WorkTimeWPF
                     UpdateActiveTaskStatus();
                     UpdateTodayTotalTime();
                     
-                    MessageBox.Show("任务已标记为完成并移到已完成列表", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CustomMessageBox.Show("任务已标记为完成并移到已完成列表", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"完成任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show($"完成任务时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -980,11 +981,11 @@ namespace WorkTimeWPF
                     _databaseManager.UpdateRecordNotes(record.RecordId, NotesTextBox.Text);
                     LoadTimeRecords(_selectedTask.TaskId);
                     NotesTextBox.Clear();
-                    MessageBox.Show("备注已保存", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CustomMessageBox.Show("备注已保存", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"保存备注时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                    CustomMessageBox.Show($"保存备注时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -1021,12 +1022,12 @@ namespace WorkTimeWPF
                         }
                     }
                     
-                    MessageBox.Show($"数据已成功导出到: {saveFileDialog.FileName}", "导出成功", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CustomMessageBox.Show($"数据已成功导出到: {saveFileDialog.FileName}", "导出成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"导出数据时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"导出数据时发生错误: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1036,13 +1037,13 @@ namespace WorkTimeWPF
             {
                 TimeRecordsScrollViewer.Visibility = Visibility.Collapsed;
                 TimeRecordsHeaderGrid.Visibility = Visibility.Collapsed;
-                ToggleTimeRecordsButton.Content = "▶";
+                UpdateToggleButtonContent(ToggleTimeRecordsButton, "📋", "▶");
             }
             else
             {
                 TimeRecordsScrollViewer.Visibility = Visibility.Visible;
                 TimeRecordsHeaderGrid.Visibility = Visibility.Visible;
-                ToggleTimeRecordsButton.Content = "▼";
+                UpdateToggleButtonContent(ToggleTimeRecordsButton, "📋", "▼");
             }
         }
 
@@ -1052,13 +1053,13 @@ namespace WorkTimeWPF
             {
                 StatisticsTabControl.Visibility = Visibility.Collapsed;
                 StatisticsControlsGrid.Visibility = Visibility.Collapsed;
-                ToggleStatisticsButton.Content = "▶";
+                UpdateToggleButtonContent(ToggleStatisticsButton, "📊", "▶");
             }
             else
             {
                 StatisticsTabControl.Visibility = Visibility.Visible;
                 StatisticsControlsGrid.Visibility = Visibility.Visible;
-                ToggleStatisticsButton.Content = "▼";
+                UpdateToggleButtonContent(ToggleStatisticsButton, "📊", "▼");
             }
         }
 
@@ -1067,7 +1068,7 @@ namespace WorkTimeWPF
             // 检查是否有正在进行的计时器
             if (_activeTimer != null)
             {
-                var result = MessageBox.Show("有任务正在计时，确定要关闭应用程序吗?", 
+                var result = CustomMessageBox.Show("有任务正在计时，确定要关闭应用程序吗?", 
                     "确认关闭", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
@@ -1231,6 +1232,58 @@ namespace WorkTimeWPF
             }
         }
 
+        private void UpdateTimerButtonContent(string text)
+        {
+            if (TimerButton.Content is StackPanel stackPanel && stackPanel.Children.Count >= 2)
+            {
+                if (stackPanel.Children[1] is TextBlock textBlock)
+                {
+                    textBlock.Text = text;
+                }
+            }
+            else
+            {
+                // 如果结构被破坏，重新创建
+                TimerButton.Content = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Children =
+                    {
+                        new TextBlock { Text = "⏱️", FontSize = 16, Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center },
+                        new TextBlock { Text = text, VerticalAlignment = VerticalAlignment.Center }
+                    }
+                };
+            }
+        }
+
+        private void UpdateToggleButtonContent(Button button, string icon, string arrow)
+        {
+            if (button.Content is StackPanel stackPanel && stackPanel.Children.Count >= 2)
+            {
+                if (stackPanel.Children[0] is TextBlock iconBlock)
+                {
+                    iconBlock.Text = icon;
+                }
+                if (stackPanel.Children[1] is TextBlock arrowBlock)
+                {
+                    arrowBlock.Text = arrow;
+                }
+            }
+            else
+            {
+                // 如果结构被破坏，重新创建
+                button.Content = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Children =
+                    {
+                        new TextBlock { Text = icon, FontSize = 12, Margin = new Thickness(0, 0, 3, 0), VerticalAlignment = VerticalAlignment.Center },
+                        new TextBlock { Text = arrow, VerticalAlignment = VerticalAlignment.Center }
+                    }
+                };
+            }
+        }
+
         private void UpdateButtonColors(ThemeColors colors)
         {
             try
@@ -1366,7 +1419,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"无法打开链接: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"无法打开链接: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

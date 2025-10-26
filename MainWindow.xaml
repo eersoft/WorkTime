@@ -631,19 +631,19 @@
 
                             <!-- 左侧：快速统计信息 -->
                             <Grid Grid.Column="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock x:Name="TotalTimeLabel" Text="总工作时间: 00:00:00" FontWeight="Bold" Margin="0,0,0,5"/>
-                                    <TextBlock x:Name="ActiveTaskLabel" Text="当前活动任务: 无" FontSize="12"/>
-                                </StackPanel>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="TotalTimeLabel" Text="总工作时间: 00:00:00" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="ActiveTaskLabel" Text="当前活动任务: 无" FontSize="12"/>
+                            </StackPanel>
 
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock x:Name="TaskCountLabel" Text="任务数量: 0" FontWeight="Bold" Margin="0,0,0,5"/>
-                                    <TextBlock x:Name="CompletedTaskCountLabel" Text="已完成: 0" FontSize="12"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock x:Name="TaskCountLabel" Text="任务数量: 0" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="CompletedTaskCountLabel" Text="已完成: 0" FontSize="12"/>
                                 </StackPanel>
                             </Grid>
 
@@ -675,13 +675,10 @@
                             <lay:LayTabItem Header="文本统计">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="任务耗时统计" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
-
-                                    <DataGrid x:Name="TaskStatisticsDataGrid" Grid.Row="1" 
+                                    <DataGrid x:Name="TaskStatisticsDataGrid" Grid.Row="0" 
                                               Style="{StaticResource ModernDataGridStyle}"
                                               FontFamily="Microsoft YaHei UI"
                                               FontSize="13"
@@ -702,13 +699,10 @@
                             <lay:LayTabItem Header="任务对比图">
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="任务耗时对比" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
-
-                                    <Border Grid.Row="1" Background="#f8f9fa" CornerRadius="3" Padding="10">
+                                    <Border Grid.Row="0" Background="#f8f9fa" CornerRadius="3" Padding="10">
                                         <lvc:CartesianChart x:Name="TaskComparisonChart" 
                                                            LegendLocation="Right"
                                                            Hoverable="True"
@@ -728,13 +722,10 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="总时长统计" FontWeight="Bold" Margin="0,0,0,10" Grid.Row="0"/>
-
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Right">
                                         <TextBlock Text="图表类型:" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                         <ComboBox x:Name="ChartTypeComboBox" Width="120" SelectedIndex="0" SelectionChanged="ChartTypeComboBox_SelectionChanged">
                                             <ComboBoxItem Content="柱状图"/>
@@ -742,7 +733,7 @@
                                         </ComboBox>
                                     </StackPanel>
 
-                                    <Border Grid.Row="2" Background="#f8f9fa" CornerRadius="3" Padding="10">
+                                    <Border Grid.Row="1" Background="#f8f9fa" CornerRadius="3" Padding="10">
                                         <lvc:CartesianChart x:Name="TotalDurationChart" 
                                                            LegendLocation="Right"
                                                            Hoverable="True"

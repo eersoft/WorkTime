@@ -2,12 +2,74 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lay="clr-namespace:LayUI.Wpf.Controls;assembly=LayUI.Wpf"
-        Title="添加新任务" Height="200" Width="418"
+        Title="添加新任务" Height="232" Width="418"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Background="#f5f5f5">
+        Background="#f5f5f5"
+        x:Name="TaskDialogWindow">
     
-    <Border Margin="5" Padding="5" CornerRadius="4" Background="White">
+    <Window.Resources>
+        <!-- 按钮样式 - 与主窗口保持一致 -->
+        <Style x:Key="DialogButtonStyle" TargetType="lay:LayButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="lay:LayButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#e8eaed"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#d1d8e0"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#6c757d"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DialogPrimaryButtonStyle" TargetType="lay:LayButton" BasedOn="{StaticResource DialogButtonStyle}">
+            <Setter Property="Foreground" Value="#2c3e50"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e8eaed"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#d1d8e0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DialogDefaultButtonStyle" TargetType="lay:LayButton" BasedOn="{StaticResource DialogButtonStyle}">
+            <Setter Property="Foreground" Value="#6c757d"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#e8eaed"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#d1d8e0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
+    <Border Margin="5" Padding="5" CornerRadius="4" Background="White" x:Name="DialogBorder">
         <Grid Width="380" Height="133">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -15,17 +77,27 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="任务名称:" FontSize="12" Grid.Row="0" Margin="0,0,0,15" Foreground="#2c3e50"/>
+            <TextBlock Text="任务名称:" FontSize="12" Grid.Row="0" Margin="0,0,0,15" Foreground="#2c3e50" x:Name="TaskNameLabel"/>
             
             <TextBox x:Name="TaskNameTextBox" Grid.Row="1" Height="35" FontSize="14" 
                      Margin="0,0,0,20" KeyDown="TaskNameTextBox_KeyDown" 
                      Padding="10,8" BorderBrush="#bdc3c7" BorderThickness="1"/>
             
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <lay:LayButton x:Name="CancelButton" Content="取消" Width="80" Height="25" 
-                        Margin="0,0,10,0" Click="CancelButton_Click" Type="Default"/>
-                <lay:LayButton x:Name="OkButton" Content="确定" Width="80" Height="25" 
-                        Click="OkButton_Click" IsDefault="True" Type="Primary"/>
+                <lay:LayButton x:Name="CancelButton" Style="{StaticResource DialogDefaultButtonStyle}" 
+                        Width="80"  Margin="0,0,10,0" Click="CancelButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="❌" FontSize="12" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="取消" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </lay:LayButton>
+                <lay:LayButton x:Name="OkButton" Style="{StaticResource DialogPrimaryButtonStyle}" 
+                        Width="80"  Click="OkButton_Click" IsDefault="True">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="✅" FontSize="12" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="确定" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </lay:LayButton>
             </StackPanel>
         </Grid>
     </Border>
