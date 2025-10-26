@@ -1068,18 +1068,12 @@ namespace WorkTimeWPF
             // 检查是否有正在进行的计时器
             if (_activeTimer != null)
             {
-                var result = CustomMessageBox.Show("有任务正在计时，确定要关闭应用程序吗?\n\n关闭后，当前任务将暂停计时。", 
+                var result = CustomMessageBox.Show("有任务正在计时，确定要关闭应用程序吗?\n\n关闭后，计时将继续在后台进行。", 
                     "确认关闭", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    try
-                    {
-                        _databaseManager.PauseTimer(_activeTimer.RecordId);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"暂停计时器时发生错误: {ex.Message}");
-                    }
+                    // 用户确认关闭，不暂停计时，让计时继续在后台进行
+                    System.Diagnostics.Debug.WriteLine($"关闭窗口，计时继续: {_activeTimer.TaskName}");
                 }
                 else
                 {
