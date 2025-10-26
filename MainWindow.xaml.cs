@@ -250,6 +250,14 @@ namespace WorkTimeWPF
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            UpdateTimerDisplay();
+        }
+
+        /// <summary>
+        /// 更新计时器显示
+        /// </summary>
+        private void UpdateTimerDisplay()
+        {
             if (_activeTimer != null && _timerRunning)
             {
                 var elapsed = DateTime.Now - _activeTimer.StartTime;
@@ -257,6 +265,16 @@ namespace WorkTimeWPF
                 var minutes = elapsed.Minutes;
                 var seconds = elapsed.Seconds;
                 TimerDisplay.Text = $"{hours:00}:{minutes:00}:{seconds:00}";
+            }
+            else if (_activeTimer != null)
+            {
+                // 如果计时器存在但未运行，显示00:00:01表示刚开始
+                TimerDisplay.Text = "00:00:01";
+            }
+            else
+            {
+                // 没有活动计时器，显示00:00:00
+                TimerDisplay.Text = "00:00:00";
             }
         }
 
@@ -293,6 +311,8 @@ namespace WorkTimeWPF
                         {
                             StartTimerUpdate();
                         }
+                        // 立即更新计时器显示
+                        UpdateTimerDisplay();
                     }
                     else
                     {
@@ -401,11 +421,107 @@ namespace WorkTimeWPF
                 
                 // 刷新任务状态
                 UpdateActiveTaskStatus();
+                
+                // 刷新UI状态
+                UpdateUIState();
+                
+                // 刷新面板可见性
+                UpdatePanelVisibility();
+                
+                System.Diagnostics.Debug.WriteLine("所有数据已刷新完成");
             }
             catch (Exception ex)
             {
                 // 静默处理刷新错误，避免影响用户体验
                 System.Diagnostics.Debug.WriteLine($"刷新数据时发生错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 更新UI状态
+        /// </summary>
+        private void UpdateUIState()
+        {
+            try
+            {
+                // 更新按钮状态
+                if (DeleteTaskButton != null)
+                {
+                    DeleteTaskButton.IsEnabled = _selectedTask != null;
+                }
+                
+                if (CompleteTaskButton != null)
+                {
+                    CompleteTaskButton.IsEnabled = _selectedTask != null && _selectedTask.TaskStatus != "completed";
+                }
+                
+                if (TimerButton != null)
+                {
+                    TimerButton.IsEnabled = _selectedTask != null;
+                }
+                
+                // 更新任务详情显示
+                UpdateTaskDetails();
+                
+                // 更新计时器显示
+                if (_activeTimer != null)
+                {
+                    UpdateTimerButtonContent("暂停计时");
+                }
+                else
+                {
+                    UpdateTimerButtonContent("开始计时");
+                }
+                
+                System.Diagnostics.Debug.WriteLine("UI状态已更新");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"更新UI状态时发生错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 更新面板可见性
+        /// </summary>
+        private void UpdatePanelVisibility()
+        {
+            try
+            {
+                // 确保面板可见性状态正确
+                if (TimeRecordsDataGrid != null && TimeRecordsHeaderGrid != null)
+                {
+                    // 根据当前状态设置面板可见性
+                    var isTimeRecordsVisible = TimeRecordsDataGrid.Visibility == Visibility.Visible;
+                    if (isTimeRecordsVisible)
+                    {
+                        UpdateToggleButtonContent(ToggleTimeRecordsButton, "📋", "▼");
+                    }
+                    else
+                    {
+                        UpdateToggleButtonContent(ToggleTimeRecordsButton, "📋", "▶");
+                    }
+                }
+                
+                if (StatisticsTabControl != null)
+                {
+                    // 根据当前状态设置统计面板可见性
+                    var isStatisticsVisible = StatisticsTabControl.Visibility == Visibility.Visible;
+                    if (isStatisticsVisible)
+                    {
+                        UpdateToggleButtonContent(ToggleStatisticsButton, "📊", "▼");
+                    }
+                    else
+                    {
+                        UpdateToggleButtonContent(ToggleStatisticsButton, "📊", "▶");
+                    }
+                }
+                
+                System.Diagnostics.Debug.WriteLine("面板可见性已更新");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"更新面板可见性时发生错误: {ex.Message}");
             }
         }
 
@@ -472,7 +588,7 @@ namespace WorkTimeWPF
                 }
 
                 var (startDate, endDate) = GetSelectedTimeRange();
-                var statistics = _databaseManager.GetTaskStatistics();
+                var statistics = _databaseManager.GetTaskStatistics(startDate, endDate);
                 
                 if (statistics != null)
                 {
@@ -526,9 +642,7 @@ namespace WorkTimeWPF
 
         private void TimePeriodComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            LoadTaskStatistics();
-            UpdateTodayTotalTime();
-            UpdateCharts();
+            RefreshAllData(); // 刷新所有数据，确保统计信息正确更新
         }
 
         private void ChartTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -574,7 +688,8 @@ namespace WorkTimeWPF
         {
             try
             {
-                var statistics = _databaseManager.GetTaskStatistics();
+                var (startDate, endDate) = GetSelectedTimeRange();
+                var statistics = _databaseManager.GetTaskStatistics(startDate, endDate);
                 if (statistics == null || !statistics.Any())
                 {
                     TaskComparisonSeries.Clear();
@@ -751,13 +866,54 @@ namespace WorkTimeWPF
             {
                 if (_databaseManager == null) return 0;
 
-                var records = _databaseManager.GetTimeRecords(null, start, end);
-                return records?.Sum(r => r.Duration ?? 0) ?? 0;
+                // 获取所有时间记录，然后在C#中计算时间段内的工作时间
+                var allRecords = _databaseManager.GetTimeRecords();
+                double totalDuration = 0;
+
+                foreach (var record in allRecords)
+                {
+                    if (record.EndTime.HasValue && record.Duration.HasValue)
+                    {
+                        // 使用类似CalculateDurationInPeriod的逻辑
+                        var durationInRange = CalculateDurationInRange(
+                            record.StartTime, 
+                            record.EndTime.Value, 
+                            record.Duration.Value, 
+                            start, 
+                            end);
+                        totalDuration += durationInRange;
+                    }
+                }
+
+                return totalDuration;
             }
             catch
             {
                 return 0;
             }
+        }
+
+        /// <summary>
+        /// 计算时间记录在指定时间段内的工作时间（秒）
+        /// </summary>
+        private double CalculateDurationInRange(DateTime recordStartTime, DateTime recordEndTime, 
+            long originalDuration, DateTime rangeStart, DateTime rangeEnd)
+        {
+            // 检查时间记录是否与时间段有交集
+            if (recordEndTime <= rangeStart || recordStartTime >= rangeEnd)
+            {
+                return 0; // 没有交集
+            }
+            
+            // 计算交集的时间范围
+            var intersectionStart = recordStartTime > rangeStart ? recordStartTime : rangeStart;
+            var intersectionEnd = recordEndTime < rangeEnd ? recordEndTime : rangeEnd;
+            
+            // 计算交集持续时间（秒）
+            var intersectionDuration = (intersectionEnd - intersectionStart).TotalSeconds;
+            
+            // 确保不超过原始持续时间
+            return Math.Min(intersectionDuration, originalDuration);
         }
 
         // 事件处理方法
@@ -771,6 +927,10 @@ namespace WorkTimeWPF
                 {
                     var taskId = _databaseManager.AddTask(inputDialog.TaskName);
                     RefreshAllData();
+                    
+                    // 重新获取活动计时器状态并更新显示
+                    _activeTimer = _databaseManager.GetActiveTimer();
+                    UpdateTimerDisplay();
                     
                     // 选中新添加的任务
                     var tasks = _databaseManager.GetTasks();
@@ -816,6 +976,10 @@ namespace WorkTimeWPF
 
                     _databaseManager.DeleteTask(_selectedTask.TaskId);
                     RefreshAllData();
+                    
+                    // 重新获取活动计时器状态并更新显示
+                    _activeTimer = _databaseManager.GetActiveTimer();
+                    UpdateTimerDisplay();
                     
                     // 清空任务详情
                     _selectedTask = null;
@@ -890,6 +1054,9 @@ namespace WorkTimeWPF
                             if (TimerButton != null)
                                 UpdateTimerButtonContent("暂停计时");
                             StartTimerUpdate();
+                            
+                            // 立即更新一次时间显示
+                            UpdateTimerDisplay();
                         }
                     }
                 }
@@ -898,6 +1065,7 @@ namespace WorkTimeWPF
                     // 开始新的计时器
                     var recordId = _databaseManager.StartTimer(_selectedTask.TaskId);
                     _activeTimer = _databaseManager.GetActiveTimer();
+                    System.Diagnostics.Debug.WriteLine($"开始计时: recordId={recordId}, _activeTimer={_activeTimer?.RecordId}, StartTime={_activeTimer?.StartTime}");
                     if (TimerButton != null)
                         UpdateTimerButtonContent("暂停计时");
                     StartTimerUpdate();
@@ -905,6 +1073,22 @@ namespace WorkTimeWPF
 
                 // 自动刷新所有数据
                 RefreshAllData();
+                
+                // 重新获取活动计时器状态
+                _activeTimer = _databaseManager.GetActiveTimer();
+                System.Diagnostics.Debug.WriteLine($"刷新后重新获取: _activeTimer={_activeTimer?.RecordId}, StartTime={_activeTimer?.StartTime}");
+                
+                // 确保定时器状态正确
+                if (_activeTimer != null && _selectedTask != null && _activeTimer.TaskId == _selectedTask.TaskId)
+                {
+                    if (!_timerRunning)
+                    {
+                        StartTimerUpdate();
+                    }
+                }
+                
+                // 立即更新一次时间显示
+                UpdateTimerDisplay();
             }
             catch (Exception ex)
             {
@@ -948,6 +1132,10 @@ namespace WorkTimeWPF
                     // 刷新所有相关数据
                     RefreshAllData();
                     
+                    // 重新获取活动计时器状态并更新显示
+                    _activeTimer = _databaseManager.GetActiveTimer();
+                    UpdateTimerDisplay();
+                    
                     // 更新任务详情显示
                     if (_selectedTask != null)
                     {
@@ -979,7 +1167,7 @@ namespace WorkTimeWPF
                 try
                 {
                     _databaseManager.UpdateRecordNotes(record.RecordId, NotesTextBox.Text);
-                    LoadTimeRecords(_selectedTask.TaskId);
+                    RefreshAllData(); // 刷新所有数据，确保统计信息也更新
                     NotesTextBox.Clear();
                     CustomMessageBox.Show("备注已保存", "成功", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -1033,15 +1221,15 @@ namespace WorkTimeWPF
 
         private void ToggleTimeRecordsButton_Click(object sender, RoutedEventArgs e)
         {
-            if (TimeRecordsScrollViewer.Visibility == Visibility.Visible)
+            if (TimeRecordsDataGrid.Visibility == Visibility.Visible)
             {
-                TimeRecordsScrollViewer.Visibility = Visibility.Collapsed;
+                TimeRecordsDataGrid.Visibility = Visibility.Collapsed;
                 TimeRecordsHeaderGrid.Visibility = Visibility.Collapsed;
                 UpdateToggleButtonContent(ToggleTimeRecordsButton, "📋", "▶");
             }
             else
             {
-                TimeRecordsScrollViewer.Visibility = Visibility.Visible;
+                TimeRecordsDataGrid.Visibility = Visibility.Visible;
                 TimeRecordsHeaderGrid.Visibility = Visibility.Visible;
                 UpdateToggleButtonContent(ToggleTimeRecordsButton, "📋", "▼");
             }

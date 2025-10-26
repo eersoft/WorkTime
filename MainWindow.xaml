@@ -321,6 +321,23 @@
             <Setter Property="TextOptions.TextRenderingMode" Value="ClearType"/>
             <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
             <Setter Property="FontSize" Value="12"/>
+            <!-- 更浅的横线颜色 -->
+            <Setter Property="HorizontalGridLinesBrush" Value="#f0f0f0"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#f0f0f0"/>
+            <!-- 边框设置 -->
+            <Setter Property="BorderBrush" Value="#dee2e6"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <!-- 滚动条设置 -->
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <!-- 鼠标滚轮支持 -->
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <!-- 冻结标头设置 -->
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+            <Setter Property="EnableColumnVirtualization" Value="True"/>
+            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+            <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
         </Style>
 
         <!-- DataGridTextColumn样式 - 文本竖直居中，水平左对齐 -->
@@ -575,25 +592,23 @@
                                        FontWeight="Bold" Grid.Column="1" VerticalAlignment="Center"/>
                         </Grid>
 
-                        <ScrollViewer Grid.Row="2" x:Name="TimeRecordsScrollViewer" VerticalScrollBarVisibility="Auto" 
-                                      HorizontalScrollBarVisibility="Auto" MaxHeight="300">
-                            <DataGrid x:Name="TimeRecordsDataGrid" 
-                                      Style="{StaticResource ModernDataGridStyle}"
-                                      SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
-                                      FontFamily="Microsoft YaHei UI"
-                                      FontSize="13"
-                                      TextOptions.TextFormattingMode="Display"
-                                      TextOptions.TextRenderingMode="ClearType"
-                                      SnapsToDevicePixels="True"
-                                      UseLayoutRounding="True">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
-                                    <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
-                                    <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
-                                    <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
+                        <DataGrid Grid.Row="2" x:Name="TimeRecordsDataGrid" 
+                                  Style="{StaticResource ModernDataGridStyle}"
+                                  SelectionChanged="TimeRecordsDataGrid_SelectionChanged"
+                                  FontFamily="Microsoft YaHei UI"
+                                  FontSize="13"
+                                  TextOptions.TextFormattingMode="Display"
+                                  TextOptions.TextRenderingMode="ClearType"
+                                  SnapsToDevicePixels="True"
+                                  UseLayoutRounding="True"
+                                  MaxHeight="300">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="开始时间" Binding="{Binding StartTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                <DataGridTextColumn Header="结束时间" Binding="{Binding EndTimeDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                <DataGridTextColumn Header="持续时间" Binding="{Binding DurationDisplay}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                                <DataGridTextColumn Header="备注" Binding="{Binding Notes}" Width="Auto" IsReadOnly="True" ElementStyle="{StaticResource CenteredTextBlockStyle}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </Grid>
                 </Border>
 

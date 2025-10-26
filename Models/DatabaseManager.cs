@@ -217,7 +217,7 @@ namespace WorkTimeWPF.Models
             return tasks;
         }
 
-        public List<TaskStatistics> GetTaskStatistics()
+        public List<TaskStatistics> GetTaskStatistics(DateTime? startDate = null, DateTime? endDate = null)
         {
             var statistics = new List<TaskStatistics>();
             try
@@ -225,6 +225,8 @@ namespace WorkTimeWPF.Models
                 using (var connection = new SQLiteConnection(_connectionString))
                 {
                     connection.Open();
+                    
+                    // 先获取所有任务和时间记录
                     var sql = @"
                         SELECT 
                             t.task_id,
@@ -232,42 +234,110 @@ namespace WorkTimeWPF.Models
                             t.task_status,
                             t.created_at,
                             t.completed_at,
-                            COUNT(tr.record_id) as session_count,
-                            COALESCE(SUM(tr.duration), 0) as total_duration_seconds
+                            tr.record_id,
+                            tr.start_time,
+                            tr.end_time,
+                            tr.duration
                         FROM tasks t
                         LEFT JOIN time_records tr ON t.task_id = tr.task_id AND tr.duration IS NOT NULL
-                        GROUP BY t.task_id, t.task_name, t.task_status, t.created_at, t.completed_at
-                        ORDER BY total_duration_seconds DESC";
+                        WHERE t.task_status != 'deleted'
+                        ORDER BY t.task_id, tr.start_time";
 
                     using (var command = new SQLiteCommand(sql, connection))
                     {
                         using (var reader = command.ExecuteReader())
                         {
+                            var taskGroups = new Dictionary<int, TaskStatistics>();
+                            
                             while (reader.Read())
                             {
-                                statistics.Add(new TaskStatistics
+                                var taskId = reader.GetInt32("task_id");
+                                
+                                // 初始化任务统计
+                                if (!taskGroups.ContainsKey(taskId))
                                 {
-                                    TaskId = reader.GetInt32("task_id"),
-                                    TaskName = reader.GetString("task_name"),
-                                    TaskStatus = reader.GetString("task_status"),
-                                    CreatedAt = reader.GetDateTime("created_at"),
-                                    CompletedAt = reader.IsDBNull("completed_at") ? null : reader.GetDateTime("completed_at"),
-                                    SessionCount = reader.GetInt32("session_count"),
-                                    TotalDurationSeconds = reader.GetInt64("total_duration_seconds"),
-                                    TaskLifetimeSeconds = null
-                                });
+                                    taskGroups[taskId] = new TaskStatistics
+                                    {
+                                        TaskId = taskId,
+                                        TaskName = reader.GetString("task_name"),
+                                        TaskStatus = reader.GetString("task_status"),
+                                        CreatedAt = reader.GetDateTime("created_at"),
+                                        CompletedAt = reader.IsDBNull("completed_at") ? (DateTime?)null : reader.GetDateTime("completed_at"),
+                                        SessionCount = 0,
+                                        TotalDurationSeconds = 0
+                                    };
+                                }
+                                
+                                // 处理时间记录
+                                if (!reader.IsDBNull("record_id"))
+                                {
+                                    var recordStartTime = reader.GetDateTime("start_time");
+                                    var recordEndTime = reader.GetDateTime("end_time");
+                                    var originalDuration = reader.GetInt64("duration");
+                                    
+                                    // 使用C#计算在目标时间段内的工作时间
+                                    var durationInPeriod = CalculateDurationInPeriod(
+                                        recordStartTime, recordEndTime, originalDuration, startDate, endDate);
+                                    
+                                    if (durationInPeriod > 0)
+                                    {
+                                        taskGroups[taskId].SessionCount++;
+                                        taskGroups[taskId].TotalDurationSeconds += durationInPeriod;
+                                    }
+                                }
                             }
+                            
+                            // 转换为列表并按总时长排序
+                            statistics = taskGroups.Values
+                                .OrderByDescending(s => s.TotalDurationSeconds)
+                                .ToList();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                // 如果查询失败，返回空列表而不是null
-                System.Diagnostics.Debug.WriteLine($"获取任务统计失败: {ex.Message}");
-                return new List<TaskStatistics>();
+                System.Diagnostics.Debug.WriteLine($"获取任务统计时发生错误: {ex.Message}");
             }
             return statistics;
+        }
+
+        /// <summary>
+        /// 计算时间记录在指定时间段内的工作时间（秒）
+        /// </summary>
+        /// <param name="recordStartTime">记录开始时间</param>
+        /// <param name="recordEndTime">记录结束时间</param>
+        /// <param name="originalDuration">原始持续时间（秒）</param>
+        /// <param name="periodStartDate">时间段开始时间</param>
+        /// <param name="periodEndDate">时间段结束时间</param>
+        /// <returns>在时间段内的工作时间（秒）</returns>
+        private long CalculateDurationInPeriod(DateTime recordStartTime, DateTime recordEndTime, 
+            long originalDuration, DateTime? periodStartDate, DateTime? periodEndDate)
+        {
+            // 如果没有时间段限制，返回原始持续时间
+            if (!periodStartDate.HasValue || !periodEndDate.HasValue)
+            {
+                return originalDuration;
+            }
+            
+            var startDate = periodStartDate.Value;
+            var endDate = periodEndDate.Value;
+            
+            // 检查时间记录是否与时间段有交集
+            if (recordEndTime <= startDate || recordStartTime >= endDate)
+            {
+                return 0; // 没有交集
+            }
+            
+            // 计算交集的时间范围
+            var intersectionStart = recordStartTime > startDate ? recordStartTime : startDate;
+            var intersectionEnd = recordEndTime < endDate ? recordEndTime : endDate;
+            
+            // 计算交集持续时间（秒）
+            var intersectionDuration = (long)(intersectionEnd - intersectionStart).TotalSeconds;
+            
+            // 确保不超过原始持续时间
+            return Math.Min(intersectionDuration, originalDuration);
         }
 
         public void UpdateTaskStatus(int taskId, string status)
