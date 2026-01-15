@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:lay="clr-namespace:LayUI.Wpf.Controls;assembly=LayUI.Wpf"
-        Title="WorkTime - 工作时间记录" Height="829" Width="1390"
+        Title="WorkTime - 工作时间记录 1.0" Height="829" Width="1390"
         MinHeight="600" MinWidth="1000"
         WindowStartupLocation="CenterScreen"
         Background="#f5f5f5"
@@ -487,7 +487,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- 任务详情区域 -->
-                <Border Grid.Row="0" Background="White" CornerRadius="5" Padding="15" Margin="0,0,0,10">
+                <Border Grid.Row="0" Background="White" CornerRadius="5" Padding="15,10,15,15" Margin="0,0,0,10">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -558,7 +558,7 @@
                 </Border>
 
                 <!-- 时间记录列表 -->
-                <Border Grid.Row="1" Background="White" CornerRadius="5" Padding="15" Margin="0,0,0,10">
+                <Border Grid.Row="1" Background="White" CornerRadius="5" Padding="15,5,15,15" Margin="0,0,0,10">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -572,10 +572,10 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="时间记录" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
+                            <TextBlock Text="时间记录" Style="{StaticResource HeaderStyle}" Grid.Column="0" VerticalAlignment="Center" Margin="0"/>
                             <Button x:Name="ToggleTimeRecordsButton" Style="{StaticResource ToggleButtonStyle}" 
-                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click">
-                                <StackPanel Orientation="Horizontal">
+                                    Grid.Column="1" Click="ToggleTimeRecordsButton_Click" VerticalAlignment="Center" Margin="0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
                                     <TextBlock Text="📋" FontSize="12" Margin="0,0,3,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="▼" VerticalAlignment="Center"/>
                                 </StackPanel>
@@ -614,7 +614,7 @@
 
 
                 <!-- 统计区域 -->
-                <Border Grid.Row="2" Background="White" CornerRadius="5" Padding="15">
+                <Border Grid.Row="2" Background="White" CornerRadius="5" Padding="15,5,15,15">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -628,10 +628,10 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Text="统计分析" Style="{StaticResource HeaderStyle}" Grid.Column="0"/>
+                            <TextBlock Text="统计分析" Style="{StaticResource HeaderStyle}" Grid.Column="0" VerticalAlignment="Center" Margin="0"/>
                             <Button x:Name="ToggleStatisticsButton" Style="{StaticResource ToggleButtonStyle}" 
-                                    Grid.Column="1" Click="ToggleStatisticsButton_Click">
-                                <StackPanel Orientation="Horizontal">
+                                    Grid.Column="1" Click="ToggleStatisticsButton_Click" VerticalAlignment="Center" Margin="0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
                                     <TextBlock Text="📊" FontSize="12" Margin="0,0,3,0" VerticalAlignment="Center"/>
                                     <TextBlock Text="▼" VerticalAlignment="Center"/>
                                 </StackPanel>
@@ -791,7 +791,7 @@
                     <TextBlock Margin="0,0,15,0" FontSize="12" VerticalAlignment="Center">
                         <Hyperlink x:Name="WuaiPojieLink" Click="WuaiPojieLink_Click" 
                                    Foreground="#ccc" TextDecorations="None">
-                            @吾爱破解
+                            EERSOFT
                         </Hyperlink>
                     </TextBlock>
                     <Button x:Name="LightThemeButton" Style="{StaticResource LightThemeButton}" Click="ThemeButton_Click" Tag="Light"/>

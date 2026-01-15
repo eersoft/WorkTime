@@ -71,6 +71,9 @@ namespace WorkTimeWPF
                 RefreshAllData();
                 CheckActiveTimer();
                 UpdateCurrentTime();
+                
+                // 初始化状态栏悬停提示功能
+                InitializeStatusBarHoverEvents();
             }
             catch (Exception ex)
             {
@@ -1618,7 +1621,7 @@ namespace WorkTimeWPF
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show($"无法打开链接: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"无法打开链接: {ex.Message}，可能是你的网络问题，也可能是作者网站搬家了，可以尝试搜索一下EERSOFT官网。", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1648,6 +1651,404 @@ namespace WorkTimeWPF
             {
                 CustomMessageBox.Show($"无法打开帮助文档: {ex.Message}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        #endregion
+
+        #region 状态栏悬停提示功能
+
+        /// <summary>
+        /// 初始化状态栏悬停提示事件
+        /// </summary>
+        private void InitializeStatusBarHoverEvents()
+        {
+            try
+            {
+                // 为所有按钮添加鼠标悬停事件
+                AddMouseEventsToButtons();
+                
+                // 为所有DataGrid添加鼠标悬停事件
+                AddMouseEventsToDataGrids();
+                
+                // 为其他控件添加鼠标悬停事件
+                AddMouseEventsToOtherControls();
+                
+                System.Diagnostics.Debug.WriteLine("状态栏悬停提示事件已初始化");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"初始化状态栏悬停提示事件时发生错误: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 为所有按钮添加鼠标悬停事件
+        /// </summary>
+        private void AddMouseEventsToButtons()
+        {
+            // 普通Button控件
+            var buttons = new Button[] 
+            { 
+                TimerButton, CompleteTaskButton, SaveNotesButton, ExportButton,
+                ToggleTimeRecordsButton, ToggleStatisticsButton,
+                LightThemeButton, BlueThemeButton, GreenThemeButton, PurpleThemeButton
+            };
+
+            foreach (var button in buttons)
+            {
+                if (button != null)
+                {
+                    button.MouseEnter += Button_MouseEnter;
+                    button.MouseLeave += Button_MouseLeave;
+                }
+            }
+
+            // LayButton控件
+            var layButtons = new LayUI.Wpf.Controls.LayButton[] 
+            { 
+                AddTaskButton, DeleteTaskButton
+            };
+
+            foreach (var button in layButtons)
+            {
+                if (button != null)
+                {
+                    button.MouseEnter += LayButton_MouseEnter;
+                    button.MouseLeave += LayButton_MouseLeave;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 为所有DataGrid添加鼠标悬停事件
+        /// </summary>
+        private void AddMouseEventsToDataGrids()
+        {
+            var dataGrids = new DataGrid[] 
+            { 
+                TasksDataGrid, CompletedTasksDataGrid, TimeRecordsDataGrid, TaskStatisticsDataGrid
+            };
+
+            foreach (var dataGrid in dataGrids)
+            {
+                if (dataGrid != null)
+                {
+                    dataGrid.MouseEnter += DataGrid_MouseEnter;
+                    dataGrid.MouseLeave += DataGrid_MouseLeave;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 为其他控件添加鼠标悬停事件
+        /// </summary>
+        private void AddMouseEventsToOtherControls()
+        {
+            var controls = new FrameworkElement[] 
+            { 
+                TimerDisplay, TaskNameLabel, TaskStatusLabel, TotalDurationLabel,
+                TotalTimeLabel, ActiveTaskLabel, TaskCountLabel, CompletedTaskCountLabel,
+                NotesTextBox, TimePeriodComboBox, ChartTypeComboBox, CurrentTimeLabel
+            };
+
+            foreach (var control in controls)
+            {
+                if (control != null)
+                {
+                    control.MouseEnter += Control_MouseEnter;
+                    control.MouseLeave += Control_MouseLeave;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新状态栏文本
+        /// </summary>
+        private void UpdateStatusBar(string message)
+        {
+            if (StatusLabel != null)
+            {
+                StatusLabel.Text = message;
+            }
+        }
+
+        /// <summary>
+        /// 恢复默认状态栏文本
+        /// </summary>
+        private void RestoreDefaultStatusBar()
+        {
+            if (_activeTimer != null)
+            {
+                UpdateStatusBar($"当前正在进行的任务: {_activeTimer.TaskName}");
+            }
+            else
+            {
+                UpdateStatusBar("就绪");
+            }
+        }
+
+        /// <summary>
+        /// 按钮鼠标进入事件处理
+        /// </summary>
+        private void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                string message = GetButtonTooltip(button);
+                UpdateStatusBar(message);
+            }
+        }
+
+        /// <summary>
+        /// 按钮鼠标离开事件处理
+        /// </summary>
+        private void Button_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            RestoreDefaultStatusBar();
+        }
+
+        /// <summary>
+        /// LayButton鼠标进入事件处理
+        /// </summary>
+        private void LayButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (sender is LayUI.Wpf.Controls.LayButton button)
+            {
+                string message = GetLayButtonTooltip(button);
+                UpdateStatusBar(message);
+            }
+        }
+
+        /// <summary>
+        /// LayButton鼠标离开事件处理
+        /// </summary>
+        private void LayButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            RestoreDefaultStatusBar();
+        }
+
+        /// <summary>
+        /// DataGrid鼠标进入事件处理
+        /// </summary>
+        private void DataGrid_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (sender is DataGrid dataGrid)
+            {
+                string message = GetDataGridTooltip(dataGrid);
+                UpdateStatusBar(message);
+            }
+        }
+
+        /// <summary>
+        /// DataGrid鼠标离开事件处理
+        /// </summary>
+        private void DataGrid_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            RestoreDefaultStatusBar();
+        }
+
+        /// <summary>
+        /// 其他控件鼠标进入事件处理
+        /// </summary>
+        private void Control_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                string message = GetControlTooltip(element);
+                UpdateStatusBar(message);
+            }
+        }
+
+        /// <summary>
+        /// 其他控件鼠标离开事件处理
+        /// </summary>
+        private void Control_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            RestoreDefaultStatusBar();
+        }
+
+        /// <summary>
+        /// 获取按钮的提示信息
+        /// </summary>
+        private string GetButtonTooltip(Button button)
+        {
+            if (button == TimerButton)
+            {
+                if (_selectedTask == null)
+                    return "请先选择一个任务才能开始计时";
+                else if (_activeTimer != null && _activeTimer.TaskId == _selectedTask.TaskId)
+                    return "点击暂停当前任务的计时";
+                else if (_activeTimer != null)
+                    return "点击切换到当前任务并开始计时";
+                else
+                    return "点击开始为当前任务计时";
+            }
+            else if (button == CompleteTaskButton)
+            {
+                if (_selectedTask == null)
+                    return "请先选择一个任务";
+                else if (_selectedTask.TaskStatus == "completed")
+                    return "该任务已经完成";
+                else
+                    return "点击将当前任务标记为已完成";
+            }
+            else if (button == SaveNotesButton)
+            {
+                if (TimeRecordsDataGrid.SelectedItem == null)
+                    return "请先选择一条时间记录";
+                else
+                    return "点击保存当前时间记录的备注";
+            }
+            else if (button == ExportButton)
+            {
+                return "点击导出当前时间段的工作时间数据到CSV文件";
+            }
+            else if (button == ToggleTimeRecordsButton)
+            {
+                if (TimeRecordsDataGrid.Visibility == Visibility.Visible)
+                    return "点击隐藏时间记录列表";
+                else
+                    return "点击显示时间记录列表";
+            }
+            else if (button == ToggleStatisticsButton)
+            {
+                if (StatisticsTabControl.Visibility == Visibility.Visible)
+                    return "点击隐藏统计分析面板";
+                else
+                    return "点击显示统计分析面板";
+            }
+            else if (button == LightThemeButton)
+            {
+                return "切换到浅色主题";
+            }
+            else if (button == BlueThemeButton)
+            {
+                return "切换到蓝色主题";
+            }
+            else if (button == GreenThemeButton)
+            {
+                return "切换到绿色主题";
+            }
+            else if (button == PurpleThemeButton)
+            {
+                return "切换到紫色主题";
+            }
+
+            return "就绪";
+        }
+
+        /// <summary>
+        /// 获取LayButton的提示信息
+        /// </summary>
+        private string GetLayButtonTooltip(LayUI.Wpf.Controls.LayButton button)
+        {
+            if (button == AddTaskButton)
+            {
+                return "点击添加新的工作任务";
+            }
+            else if (button == DeleteTaskButton)
+            {
+                if (_selectedTask == null)
+                    return "请先选择一个任务才能删除";
+                else
+                    return "点击删除当前选中的任务（注意：删除后无法恢复）";
+            }
+
+            return "就绪";
+        }
+
+        /// <summary>
+        /// 获取DataGrid的提示信息
+        /// </summary>
+        private string GetDataGridTooltip(DataGrid dataGrid)
+        {
+            if (dataGrid == TasksDataGrid)
+            {
+                return "任务列表 - 点击选择任务，双击查看详情，支持按列排序";
+            }
+            else if (dataGrid == CompletedTasksDataGrid)
+            {
+                return "已完成任务列表 - 显示所有已完成的任务及其统计信息";
+            }
+            else if (dataGrid == TimeRecordsDataGrid)
+            {
+                return "时间记录列表 - 显示当前任务的所有工作时间记录，点击选择记录可添加备注";
+            }
+            else if (dataGrid == TaskStatisticsDataGrid)
+            {
+                return "任务统计列表 - 显示各任务的工作时间统计，支持按列排序";
+            }
+
+            return "就绪";
+        }
+
+        /// <summary>
+        /// 获取其他控件的提示信息
+        /// </summary>
+        private string GetControlTooltip(FrameworkElement element)
+        {
+            if (element == TimerDisplay)
+            {
+                if (_activeTimer != null)
+                    return $"当前计时: {_activeTimer.TaskName}";
+                else
+                    return "计时器显示 - 显示当前任务的计时时间";
+            }
+            else if (element == TaskNameLabel)
+            {
+                if (_selectedTask != null)
+                    return $"当前选中任务: {_selectedTask.TaskName}";
+                else
+                    return "任务名称显示";
+            }
+            else if (element == TaskStatusLabel)
+            {
+                if (_selectedTask != null)
+                    return $"任务状态: {_selectedTask.StatusDisplayName}";
+                else
+                    return "任务状态显示";
+            }
+            else if (element == TotalDurationLabel)
+            {
+                return "显示当前任务的总工作时间";
+            }
+            else if (element == TotalTimeLabel)
+            {
+                return "显示选定时间段内的总工作时间";
+            }
+            else if (element == ActiveTaskLabel)
+            {
+                if (_activeTimer != null)
+                    return $"当前活动任务: {_activeTimer.TaskName}";
+                else
+                    return "当前活动任务: 无";
+            }
+            else if (element == TaskCountLabel)
+            {
+                return "显示总任务数量";
+            }
+            else if (element == CompletedTaskCountLabel)
+            {
+                return "显示已完成任务数量";
+            }
+            else if (element == NotesTextBox)
+            {
+                return "输入备注信息，选择时间记录后可保存";
+            }
+            else if (element == TimePeriodComboBox)
+            {
+                return "选择统计时间段，影响图表和统计数据";
+            }
+            else if (element == ChartTypeComboBox)
+            {
+                return "选择图表显示类型：柱状图或折线图";
+            }
+            else if (element == CurrentTimeLabel)
+            {
+                return "当前系统时间";
+            }
+
+            return "就绪";
         }
 
         #endregion
